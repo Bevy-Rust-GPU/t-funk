@@ -1,0 +1,22 @@
+use crate::t_funk::{
+    function::Function,
+    macros::{arrow::Arrow, category::Category, Closure},
+};
+
+extern crate alloc;
+
+#[derive(
+    Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
+)]
+pub struct ToString;
+
+impl<T> Function<T> for ToString
+where
+    T: alloc::string::ToString,
+{
+    type Output = alloc::string::String;
+
+    fn call(input: T) -> Self::Output {
+        input.to_string()
+    }
+}

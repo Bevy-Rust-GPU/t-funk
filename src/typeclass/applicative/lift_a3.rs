@@ -1,0 +1,28 @@
+use crate::t_funk::{
+    closure::Closure,
+    function::Function,
+    macros::{arrow::Arrow, category::Category, Closure},
+    typeclass::{
+        applicative::{Apply, LiftA2},
+        functor::Fmap,
+    },
+};
+
+/// Lift a ternary function to actions
+#[derive(
+    Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
+)]
+pub struct LiftA3;
+
+impl<F, A, B, C> Function<(F, A, B, C)> for LiftA3
+where
+    A: Fmap<F>,
+    A::Fmap: Apply<B>,
+    <A::Fmap as Apply<B>>::Apply: Apply<C>,
+{
+    type Output = <<A::Fmap as Apply<B>>::Apply as Apply<C>>::Apply;
+
+    fn call((f, a, b, c): (F, A, B, C)) -> Self::Output {
+        LiftA2.call((f, a, b)).apply(c)
+    }
+}
