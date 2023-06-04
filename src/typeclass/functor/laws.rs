@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Compose},
     function::Id,
 };

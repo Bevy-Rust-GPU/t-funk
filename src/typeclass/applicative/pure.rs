@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use crate::t_funk::{function::Function, macros::Closure};
+use crate::{function::Function, macros::Closure};
 
 pub trait Pure {
     type Pure<T>;

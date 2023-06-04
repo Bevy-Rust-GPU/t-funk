@@ -1,4 +1,4 @@
-use crate::t_funk::macros::{
+use crate::macros::{
     applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
     semigroup::Semigroup, Copointed, Pointed,
 };
@@ -47,7 +47,7 @@ pub struct Right<T>(pub T);
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::Curry2,
         function::{Add, Mul},
         typeclass::functor::{test_functor_laws, Fmap},

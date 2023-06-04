@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     function::Function,
     macros::{arrow::Arrow, category::Category, Closure},
     typeclass::{applicative::Apply, functor::Fmap},
@@ -24,7 +24,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Curry2},
         typeclass::monad::Just,
         typeclass::{applicative::LiftA2, Tuple},

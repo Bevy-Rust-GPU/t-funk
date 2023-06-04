@@ -10,9 +10,9 @@ pub use foldr::*;
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Compose, Curry2, Flip},
-        collection::tlist::ToHList,
+        collection::tuple::ToHList,
         function::Sub,
         typeclass::{
             foldable::FoldMap,

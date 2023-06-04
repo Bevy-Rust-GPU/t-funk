@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::Closure,
     macros::{Copointed, Pointed},
     typeclass::functor::Fmap,
@@ -21,7 +21,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::Curry2,
         function::{Add, Function, Mul},
         macros::Closure,

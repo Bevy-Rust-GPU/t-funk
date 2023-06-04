@@ -1,4 +1,4 @@
-use crate::t_funk::{function::Function, macros::Closure};
+use crate::{function::Function, macros::Closure};
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure)]
 pub struct RShiftTuple;

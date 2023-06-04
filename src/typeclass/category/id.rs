@@ -1,4 +1,4 @@
-use crate::t_funk::macros::functions;
+use crate::macros::functions;
 
 #[functions]
 pub trait Id {

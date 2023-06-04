@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Curried2, Curry2, Flip, Flipped},
     collection::hlist::{Nil, PushFrontF},
     function::Function,

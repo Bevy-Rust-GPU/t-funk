@@ -1,6 +1,6 @@
 extern crate std;
 
-use crate::t_funk::{function::Function, macros::Closure};
+use crate::{function::Function, macros::Closure};
 use core::fmt::{Debug, Display};
 use std::{format, println, string::String};
 

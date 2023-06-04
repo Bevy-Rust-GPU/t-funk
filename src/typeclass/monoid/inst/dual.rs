@@ -1,4 +1,4 @@
-use crate::t_funk::macros::{
+use crate::macros::{
     applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
     semigroup::Semigroup, Copointed, Pointed,
 };

@@ -1,6 +1,6 @@
 use core::ops::{Deref, DerefMut};
 
-use crate::t_funk::{
+use crate::{
     closure::{Closure, OutputT},
     function::Function,
     macros::{arrow::Arrow, category::Category, Closure},

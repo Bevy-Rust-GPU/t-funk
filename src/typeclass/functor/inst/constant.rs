@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     macros::{Copointed, Pointed},
     typeclass::functor::Fmap,
 };

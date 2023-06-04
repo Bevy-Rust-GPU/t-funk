@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Curry2, Curry2A, Spread, Spreaded},
     function::{Const, Function, Id},
     macros::{arrow::Arrow, category::Category, Closure, Copointed, Pointed},
@@ -156,11 +156,11 @@ impl Function<()> for Get {
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Curry2, Curry2A},
         collection::{
             hlist::{Cons, Nil},
-            tlist::ToHList,
+            tuple::ToHList,
         },
         function::{Const, Function, ReplicateM},
         macros::Closure,

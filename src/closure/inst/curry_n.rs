@@ -1,10 +1,10 @@
 use core::marker::PhantomData;
 
-use crate::t_funk::{
+use crate::{
     closure::Closure,
     collection::{
-        hlist::{Cons, HList, Nil, PushBack, ToTList},
-        tlist::ToHList,
+        hlist::{Cons, HList, Nil, PushBack, ToTuple},
+        tuple::ToHList,
     },
     macros::{arrow::Arrow, category::Category},
     typeclass::pointed::Pointed,
@@ -59,7 +59,7 @@ where
 
 impl<F, AI> Pointed for CurriedN<F, Nil, AI>
 where
-    F: Closure<AI::TList>,
+    F: Closure<AI::Tuple>,
     AI: HList,
 {
     type Pointed = F;
@@ -72,12 +72,12 @@ where
 impl<F, AO, I> Closure<I> for CurriedN<F, AO, Cons<I, Nil>>
 where
     AO: PushBack<I>,
-    F: Closure<<AO::PushBack as ToTList>::TList>,
+    F: Closure<<AO::PushBack as ToTuple>::Tuple>,
 {
     type Output = F::Output;
 
     fn call(self, input: I) -> Self::Output {
-        self.0.call(self.1.push_back(input).to_tlist())
+        self.0.call(self.1.push_back(input).to_tuple())
     }
 }
 
@@ -94,7 +94,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, CurryN},
         function::Function,
         macros::Closure,

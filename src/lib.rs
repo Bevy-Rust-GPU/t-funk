@@ -52,6 +52,8 @@
 //! of all their component functions before any method can be called.
 //!
 
+extern crate self as t_funk;
+
 pub mod closure;
 pub mod function;
 pub mod lens;

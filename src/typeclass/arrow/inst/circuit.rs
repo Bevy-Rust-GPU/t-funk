@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Curry2, Curry2A},
     function::{Function, Id, MakePair, Swap},
     macros::{category::Category, Closure, Copointed, Pointed},
@@ -12,7 +12,7 @@ use crate::t_funk::{
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Pointed, Copointed)]
 pub struct Circuit<F>(pub F);
 
-impl<F> crate::t_funk::typeclass::category::Id for Circuit<F> {
+impl<F> crate::typeclass::category::Id for Circuit<F> {
     type Id = Circuit<Curry2A<Tuple, Id>>;
 
     fn id() -> Self::Id {
@@ -124,7 +124,7 @@ impl<T, F> Fanout<Circuit<F>> for Circuit<T> {
     >;
 
     fn fanout(self, f: Circuit<F>) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(type_fields::t_funk::typeclass::arrow::Split::split(self, f))
+        Self::arr(MakePair).compose_l(crate::typeclass::arrow::Split::split(self, f))
     }
 }
 
@@ -188,12 +188,12 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         function::{Add, Div},
         typeclass::category::ComposeL,
     };
 
-    use crate::t_funk::{
+    use crate::{
         closure::Closure, closure::Curry2, function::Const, typeclass::arrow::Arr,
         typeclass::arrow::Fanout,
     };

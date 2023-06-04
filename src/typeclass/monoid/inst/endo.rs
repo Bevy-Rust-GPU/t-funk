@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Compose, Composed},
     function::Id,
     macros::{Copointed, Pointed},
@@ -82,8 +82,8 @@ impl<T, U> Mappend<Endo<U>> for Endo<T> {
 #[cfg(test)]
 mod test {
     use crate::{
-        t_funk::collection::tlist::ToHList,
-        t_funk::{
+        collection::tuple::ToHList,
+        {
             closure::{Closure, Compose, Composed, Curried2, Curry2, Curry2A},
             function::Add,
             typeclass::{foldable::Foldr, pointed::PointF, semigroup::Mappend},

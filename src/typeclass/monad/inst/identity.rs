@@ -1,4 +1,4 @@
-use crate::t_funk::macros::{
+use crate::macros::{
     applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
     semigroup::Semigroup, Copointed, Pointed,
 };
@@ -26,9 +26,9 @@ pub struct Identity<T>(pub T);
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Compose, Curry2, Curry2B, CurryN, Flip},
-        collection::tlist::ToHList,
+        collection::tuple::ToHList,
         function::{Add, Div, Mul, Sub},
         typeclass::{
             applicative::Apply,

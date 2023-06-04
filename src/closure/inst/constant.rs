@@ -1,4 +1,4 @@
-use type_fields::t_funk::{
+use crate::{
     closure::Closure,
     macros::{applicative::Applicative, functor::Functor, monad::Monad},
 };

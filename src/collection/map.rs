@@ -1,8 +1,6 @@
 //! Type-level map, which associates type keys with values
 
-use type_fields_macros::functions;
-
-use crate::t_funk::peano::*;
+use crate::{macros::functions, peano::*};
 
 #[functions]
 pub trait Get<T> {

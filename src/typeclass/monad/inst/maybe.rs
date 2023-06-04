@@ -1,9 +1,9 @@
-use crate::t_funk::macros::{
+use crate::macros::{
     applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, Copointed,
     Pointed,
 };
 
-use crate::t_funk::typeclass::{
+use crate::typeclass::{
     applicative::{Apply, Pure},
     copointed::Copointed,
     foldable::{Fold, FoldMap, Foldl, Foldr},
@@ -197,7 +197,7 @@ impl<T> Maybe<T> for Just<T> {}
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Curry2, CurryN},
         function::{Add, Mul},
         typeclass::functor::{test_functor_laws, Fmap},

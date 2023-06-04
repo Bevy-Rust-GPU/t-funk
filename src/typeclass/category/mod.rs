@@ -6,7 +6,7 @@ pub use id::*;
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         typeclass::category::Compose, typeclass::category::Id, function::Add, closure::{Closure, Curry2},
     };
 

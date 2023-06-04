@@ -74,7 +74,7 @@ pub fn branch_unary<L, T, R>(l: L, t: T, r: R) -> Branch<L, T, R> {
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::Curry2,
         function::Add,
         function::ToString,

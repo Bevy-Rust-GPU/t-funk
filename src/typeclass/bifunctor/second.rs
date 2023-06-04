@@ -1,4 +1,4 @@
-use crate::t_funk::{closure::Closure, macros::functions};
+use crate::{closure::Closure, macros::functions};
 
 #[functions]
 pub trait Second<F> {

@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     closure::{Closure, Curry2, Curry2B},
     function::Function,
     macros::{arrow::Arrow, category::Category, monad::Then, Closure},
@@ -68,7 +68,7 @@ where
 mod test {
     use crate::{
         do_monad,
-        t_funk::{
+        {
             closure::{Closure, Compose, Composed},
             function::{Function, Id},
             macros::Closure,

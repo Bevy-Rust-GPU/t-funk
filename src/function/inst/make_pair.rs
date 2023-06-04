@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     function::Function,
     macros::{arrow::Arrow, category::Category, Closure},
 };

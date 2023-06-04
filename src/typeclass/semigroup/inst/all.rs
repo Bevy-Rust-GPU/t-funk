@@ -1,4 +1,4 @@
-use crate::t_funk::{
+use crate::{
     macros::{
         applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, Copointed,
         Pointed,
@@ -39,7 +39,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::typeclass::semigroup::{All, Mappend};
+    use crate::typeclass::semigroup::{All, Mappend};
 
     #[test]
     fn test_all() {

@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use crate::t_funk::{
+use crate::{
     closure::Closure,
     collection::hlist::Nil,
     function::Id as IdF,
@@ -35,7 +35,7 @@ impl<F> Id for Pure<F> {
 }
 
 impl<F> Id for Effect<F> {
-    type Id = Pure<crate::t_funk::function::Id>;
+    type Id = Pure<crate::function::Id>;
 
     fn id() -> Self::Id {
         Pure(IdF)
@@ -43,7 +43,7 @@ impl<F> Id for Effect<F> {
 }
 
 impl<F1, F2> Id for Seq<F1, F2> {
-    type Id = Pure<crate::t_funk::function::Id>;
+    type Id = Pure<crate::function::Id>;
 
     fn id() -> Self::Id {
         Pure(IdF)
@@ -51,7 +51,7 @@ impl<F1, F2> Id for Seq<F1, F2> {
 }
 
 impl<F1, F2> Id for Par<F1, F2> {
-    type Id = Pure<crate::t_funk::function::Id>;
+    type Id = Pure<crate::function::Id>;
 
     fn id() -> Self::Id {
         Pure(IdF)
@@ -289,11 +289,11 @@ where
 }
 
 impl<F, A, P> Closure<Pure<P>> for Analyze<F, A> {
-    type Output = Nil; //<MemptyF<A> as crate::t_funk::applicative::Pure>::Pure<A>;
+    type Output = Nil; //<MemptyF<A> as crate::applicative::Pure>::Pure<A>;
 
     fn call(self, _: Pure<P>) -> Self::Output {
         Nil
-        //<MemptyF<A> as crate::t_funk::applicative::Pure>::pure(Default::default())
+        //<MemptyF<A> as crate::applicative::Pure>::pure(Default::default())
     }
 }
 
@@ -399,7 +399,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Curry2, Curry2A},
         function::{Add, Div, Function, Mul},
         macros::{

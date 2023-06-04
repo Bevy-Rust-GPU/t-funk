@@ -1,8 +1,9 @@
 //! Type-level Set, which can contain at most one instance of a given type
 
-use type_fields_macros::functions;
-
-use crate::t_funk::closure::{Closure, Compose, Composed, Curried2, Curry2, Flip, Flipped};
+use crate::{
+    closure::{Closure, Compose, Composed, Curried2, Curry2, Flip, Flipped},
+    macros::functions,
+};
 
 #[functions]
 pub trait Set<T> {

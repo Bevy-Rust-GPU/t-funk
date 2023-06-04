@@ -1,6 +1,6 @@
 use core::marker::PhantomData;
 
-use crate::t_funk::{
+use crate::{
     closure::Closure,
     function::Id,
     typeclass::{
@@ -203,7 +203,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::t_funk::{
+    use crate::{
         closure::{Closure, Compose, Curry2, CurryN, Flip},
         function::{Add, Div, Mul, Sub},
         typeclass::{
