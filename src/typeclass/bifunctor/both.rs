@@ -1,6 +1,10 @@
-use crate::{closure::Closure, macros::functions};
+use crate::{
+    closure::Closure,
+    macros::{functions, types},
+};
 
 #[functions]
+#[types]
 pub trait Both<F1, F2> {
     type Both;
 

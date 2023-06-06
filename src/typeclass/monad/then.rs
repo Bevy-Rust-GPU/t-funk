@@ -1,6 +1,7 @@
-use crate::macros::functions;
+use crate::macros::{functions, types};
 
 #[functions]
+#[types]
 pub trait Then<F> {
     type Then;
 

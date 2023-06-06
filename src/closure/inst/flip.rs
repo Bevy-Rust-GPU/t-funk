@@ -1,3 +1,5 @@
+use t_funk_macros::types;
+
 use crate::{
     closure::Closure,
     macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed},
@@ -5,6 +7,7 @@ use crate::{
 
 /// Flip the arguments of an arity 2 function
 #[functions]
+#[types]
 pub trait Flip: Sized {
     fn flip(self) -> Flipped<Self>;
 }

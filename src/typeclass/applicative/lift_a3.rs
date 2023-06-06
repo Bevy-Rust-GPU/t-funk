@@ -1,28 +1,19 @@
-use crate::{
-    closure::Closure,
-    function::Function,
-    macros::{arrow::Arrow, category::Category, Closure},
-    typeclass::{
-        applicative::{Apply, LiftA2},
-        functor::Fmap,
-    },
+use t_funk_macros::lift;
+
+use crate::typeclass::{
+    applicative::Apply,
+    functor::{Fmap, FmapT},
 };
 
-/// Lift a ternary function to actions
-#[derive(
-    Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
-)]
-pub struct LiftA3;
+use super::{lift_a2, ApplyT};
 
-impl<F, A, B, C> Function<(F, A, B, C)> for LiftA3
+/// Lift a ternary function to actions
+#[lift]
+pub fn lift_a3<F, A, B, C>(f: F, a: A, b: B, c: C) -> ApplyT<ApplyT<FmapT<A, F>, B>, C>
 where
     A: Fmap<F>,
-    A::Fmap: Apply<B>,
-    <A::Fmap as Apply<B>>::Apply: Apply<C>,
+    FmapT<A, F>: Apply<B>,
+    ApplyT<FmapT<A, F>, B>: Apply<C>,
 {
-    type Output = <<A::Fmap as Apply<B>>::Apply as Apply<C>>::Apply;
-
-    fn call((f, a, b, c): (F, A, B, C)) -> Self::Output {
-        LiftA2.call((f, a, b)).apply(c)
-    }
+    lift_a2(f, a, b).apply(c)
 }

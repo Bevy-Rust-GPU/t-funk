@@ -1,3 +1,5 @@
+use t_funk_macros::types;
+
 use crate::{
     closure::Closure,
     macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed},
@@ -6,15 +8,13 @@ use crate::{
 /// Right-to-left composition
 /// (.)
 #[functions]
+#[types]
 pub trait Compose<F>: Sized {
     type Compose;
     type ComposeL;
     fn compose(self, f: F) -> Self::Compose;
     fn compose_l(self, f: F) -> Self::ComposeL;
 }
-
-pub type ComposeT<T, F> = <T as Compose<F>>::Compose;
-pub type ComposeLT<T, F> = <T as Compose<F>>::ComposeL;
 
 impl<T, F> Compose<F> for T {
     type Compose = Composed<T, F>;

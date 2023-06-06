@@ -1,4 +1,4 @@
-pub use t_funk_macros::{functions, Closure, Copointed, Lenses, Pointed};
+pub use t_funk_macros::{lift, functions, types, define_adt, impl_adt, Closure, Copointed, Lenses, Pointed};
 
 pub mod applicative {
     pub use t_funk_macros::{Applicative, Apply, Pure};

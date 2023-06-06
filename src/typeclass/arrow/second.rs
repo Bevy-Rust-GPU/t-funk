@@ -1,16 +1,17 @@
+use t_funk_macros::types;
+
 use crate::t_funk::{
     closure::Closure,
     macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed},
 };
 
 #[functions]
+#[types]
 pub trait Second {
     type Second;
 
     fn second(self) -> Self::Second;
 }
-
-pub type SecondT<T> = <T as Second>::Second;
 
 #[derive(
     Debug,

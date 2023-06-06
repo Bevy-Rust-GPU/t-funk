@@ -1,25 +1,18 @@
-use crate::{
-    function::Function,
-    macros::{arrow::Arrow, category::Category, Closure},
-    typeclass::{applicative::Apply, functor::Fmap},
+use t_funk_macros::lift;
+
+use crate::typeclass::{
+    applicative::{Apply, ApplyT},
+    functor::{Fmap, FmapT},
 };
 
 /// Lift a binary function to actions
-#[derive(
-    Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
-)]
-pub struct LiftA2;
-
-impl<F, A, B> Function<(F, A, B)> for LiftA2
+#[lift]
+pub fn lift_a2<F, A, B>(f: F, a: A, b: B) -> ApplyT<FmapT<A, F>, B>
 where
     A: Fmap<F>,
-    A::Fmap: Apply<B>,
+    FmapT<A, F>: Apply<B>,
 {
-    type Output = <A::Fmap as Apply<B>>::Apply;
-
-    fn call((f, a, b): (F, A, B)) -> Self::Output {
-        a.fmap(f).apply(b)
-    }
+    a.fmap(f).apply(b)
 }
 
 #[cfg(test)]
@@ -27,7 +20,7 @@ mod test {
     use crate::{
         closure::{Closure, Curry2},
         typeclass::monad::Just,
-        typeclass::{applicative::LiftA2, Tuple},
+        typeclass::{applicative::LiftA2, monad::Tuple},
     };
 
     #[test]

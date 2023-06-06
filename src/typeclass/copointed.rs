@@ -1,7 +1,8 @@
-use crate::macros::functions;
+use crate::macros::{functions, types};
 
 /// A type that can unwrap a value
 #[functions]
+#[types]
 pub trait Copointed
 where
     Self: Sized,
@@ -11,5 +12,3 @@ where
     /// Unwrap `Unit` from `Self`
     fn copoint(self) -> Self::Copointed;
 }
-
-pub type CopointedT<T> = <T as Copointed>::Copointed;

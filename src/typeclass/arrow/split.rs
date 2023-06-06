@@ -1,15 +1,16 @@
+use t_funk_macros::types;
+
 use crate::t_funk::macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed};
 
 use crate::t_funk::closure::Closure;
 
 #[functions]
+#[types]
 pub trait Split<G>: Sized {
     type Split;
 
     fn split(self, g: G) -> Self::Split;
 }
-
-pub type SplitT<T, G> = <T as Split<G>>::Split;
 
 #[derive(
     Debug,

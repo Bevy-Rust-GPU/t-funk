@@ -79,3 +79,4 @@ impl<F> Function<F> for ReplicateMDiscard<()> {
         f
     }
 }
+

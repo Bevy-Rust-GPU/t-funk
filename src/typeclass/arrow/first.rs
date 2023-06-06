@@ -1,16 +1,17 @@
+use t_funk_macros::types;
+
 use crate::t_funk::{
     closure::Closure,
     macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed},
 };
 
 #[functions]
+#[types]
 pub trait First {
     type First;
 
     fn first(self) -> Self::First;
 }
-
-pub type FirstT<T> = <T as First>::First;
 
 #[derive(
     Debug,

@@ -1,16 +1,17 @@
+use t_funk_macros::types;
+
 use crate::t_funk::{
     closure::Closure,
     macros::{arrow::Arrow, category::Category, functions, Copointed, Pointed},
 };
 
 #[functions]
+#[types]
 pub trait Fanout<F> {
     type Fanout;
 
     fn fanout(self, f: F) -> Self::Fanout;
 }
-
-pub type FanoutT<T, U> = <T as Fanout<U>>::Fanout;
 
 #[derive(
     Debug,

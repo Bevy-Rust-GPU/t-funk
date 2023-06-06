@@ -1,3 +1,6 @@
+use t_funk_macros::types;
+
+#[types]
 pub trait Arr<F> {
     type Arr;
 

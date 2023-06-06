@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use t_funk_macros::types;
+
 use crate::t_funk::{
     function::Function,
     macros::{
@@ -10,6 +12,7 @@ use crate::t_funk::{
 };
 
 /// A type that can wrap a value
+#[types]
 pub trait Pointed
 where
     Self: Sized,

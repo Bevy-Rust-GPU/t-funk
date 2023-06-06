@@ -28,7 +28,7 @@ mod remove;
 mod semigroup;
 mod set;
 mod sets;
-mod to_tlist;
+mod to_tuple;
 mod traversable;
 
 pub use append::*;
@@ -55,7 +55,7 @@ pub use remove::*;
 pub use semigroup::*;
 pub use set::*;
 pub use sets::*;
-pub use to_tlist::*;
+pub use to_tuple::*;
 pub use traversable::*;
 
 use crate::{

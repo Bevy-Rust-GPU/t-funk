@@ -1,6 +1,9 @@
+use t_funk_macros::types;
+
 use crate::{closure::Closure, macros::functions};
 
 #[functions]
+#[types]
 pub trait First<F> {
     type First;
 

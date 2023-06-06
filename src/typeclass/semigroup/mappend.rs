@@ -1,7 +1,8 @@
-use crate::macros::functions;
+use crate::macros::{functions, types};
 
 /// A type with a binary associative function.
 #[functions]
+#[types]
 pub trait Mappend<T> {
     type Mappend;
 

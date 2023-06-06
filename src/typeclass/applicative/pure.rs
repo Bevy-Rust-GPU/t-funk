@@ -1,7 +1,10 @@
 use core::marker::PhantomData;
 
+use t_funk_macros::types;
+
 use crate::{function::Function, macros::Closure};
 
+#[types]
 pub trait Pure {
     type Pure<T>;
     fn pure<T>(t: T) -> Self::Pure<T>;

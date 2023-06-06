@@ -1,5 +1,7 @@
 use core::marker::PhantomData;
 
+use t_funk_macros::{types, functions};
+
 use crate::{
     closure::Closure,
     collection::{
@@ -10,6 +12,8 @@ use crate::{
     typeclass::pointed::Pointed,
 };
 
+#[functions]
+#[types]
 pub trait CurryN<I> {
     type Curried;
 
