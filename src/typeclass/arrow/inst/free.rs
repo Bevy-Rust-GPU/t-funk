@@ -17,7 +17,7 @@ use crate::{
 
 define_adt! {
     #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct
+    pub struct FreeArrow
       = Pure<F>(pub F)
       | Effect<F1>(pub F1)
       | Seq<F1, F2>(pub F1, pub F2)
