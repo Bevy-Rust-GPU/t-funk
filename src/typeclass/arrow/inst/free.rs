@@ -17,10 +17,11 @@ use crate::{
 
 define_adt! {
     #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct Pure<F>(pub F)
-             | Effect<F1>(pub F1)
-             | Seq<F1, F2>(pub F1, pub F2)
-             | Par<F1, F2>(pub F1, pub F2);
+    pub struct
+      = Pure<F>(pub F)
+      | Effect<F1>(pub F1)
+      | Seq<F1, F2>(pub F1, pub F2)
+      | Par<F1, F2>(pub F1, pub F2);
 }
 
 impl_adt! {
