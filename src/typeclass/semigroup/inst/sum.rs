@@ -61,10 +61,10 @@ where
     }
 }
 
-impl<T> Pure for Sum<T> {
-    type Pure<U> = Sum<U>;
+impl<T, U> Pure<U> for Sum<T> {
+    type Pure = Sum<U>;
 
-    fn pure<U>(t: U) -> Self::Pure<U> {
+    fn pure(t: U) -> Self::Pure {
         Sum(t)
     }
 }

@@ -2,7 +2,7 @@ use crate::{
     closure::{Closure, Curried2, Curry2, Flip, Flipped},
     collection::hlist::{Cons, Nil, PushFrontF},
     typeclass::{
-        applicative::{Apply, Pure},
+        applicative::{Apply, Pure, PureT},
         functor::Fmap,
         traversable::Traverse,
     },
@@ -28,11 +28,11 @@ where
 
 impl<F, P> Traverse<F, P> for Nil
 where
-    P: Pure,
+    P: Pure<Self>,
 {
-    type Traverse = P::Pure<Self>;
+    type Traverse = PureT<P, Self>;
 
     fn traverse(self, _: F) -> Self::Traverse {
-        P::pure::<Self>(self)
+        P::pure(self)
     }
 }

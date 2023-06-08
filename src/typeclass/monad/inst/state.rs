@@ -1,27 +1,13 @@
 use crate::{
     closure::{Closure, Curry2, Curry2A, Spread, Spreaded},
-    function::{Const, Function, Id},
+    function::{Const, Function, Id, MakePair},
     macros::{arrow::Arrow, category::Category, Closure, Copointed, Pointed},
     typeclass::{
         applicative::{Apply, Pure},
         functor::{Fmap, Replace},
-        monad::{Chain, Then},
+        monad::{Chain, Then, Return},
     },
 };
-
-/// 2-tuple constructor
-#[derive(
-    Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
-)]
-pub struct Tuple;
-
-impl<A, B> Function<(A, B)> for Tuple {
-    type Output = (A, B);
-
-    fn call(input: (A, B)) -> Self::Output {
-        input
-    }
-}
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Pointed, Copointed)]
 pub struct State<F>(pub F);
@@ -58,11 +44,11 @@ impl<F1, F2> Replace<F2> for State<F1> {
     }
 }
 
-impl<F> Pure for State<F> {
-    type Pure<T> = State<Curry2A<Tuple, T>>;
+impl<F, T> Pure<T> for State<F> {
+    type Pure = State<Curry2A<MakePair, T>>;
 
-    fn pure<T>(t: T) -> Self::Pure<T> {
-        State(Tuple.prefix2(t))
+    fn pure(t: T) -> Self::Pure {
+        State(MakePair.prefix2(t))
     }
 }
 
@@ -97,6 +83,14 @@ impl<T, F> Chain<F> for State<T> {
 
     fn chain(self, f: F) -> Self::Chain {
         State(StateMonad(self, f))
+    }
+}
+
+impl<F, T> Return<T> for State<F> {
+    type Return = State<Curry2A<MakePair, T>>;
+
+    fn r#return(t: T) -> Self::Return {
+        State(MakePair.prefix2(t))
     }
 }
 
@@ -147,10 +141,10 @@ impl<I> Function<I> for Put {
 pub struct Get;
 
 impl Function<()> for Get {
-    type Output = State<Spreaded<Tuple>>;
+    type Output = State<Spreaded<MakePair>>;
 
     fn call(_: ()) -> Self::Output {
-        State(Tuple.spread())
+        State(MakePair.spread())
     }
 }
 

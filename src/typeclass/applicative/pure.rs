@@ -5,9 +5,9 @@ use t_funk_macros::types;
 use crate::{function::Function, macros::Closure};
 
 #[types]
-pub trait Pure {
-    type Pure<T>;
-    fn pure<T>(t: T) -> Self::Pure<T>;
+pub trait Pure<T> {
+    type Pure;
+    fn pure(t: T) -> Self::Pure;
 }
 
 #[derive(Closure)]
@@ -27,9 +27,9 @@ impl<T> Clone for PureF<T> {
 
 impl<T, U> Function<U> for PureF<T>
 where
-    T: Pure,
+    T: Pure<U>,
 {
-    type Output = T::Pure<U>;
+    type Output = T::Pure;
 
     fn call(input: U) -> Self::Output {
         T::pure(input)

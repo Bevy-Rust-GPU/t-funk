@@ -3,6 +3,7 @@ use crate::macros::{
     Pointed,
 };
 
+use crate::typeclass::monad::Return;
 use crate::typeclass::{
     applicative::{Apply, Pure},
     copointed::Copointed,
@@ -49,10 +50,10 @@ impl<T> Replace<T> for Nothing {
     }
 }
 
-impl Pure for Nothing {
-    type Pure<T> = Just<T>;
+impl<T> Pure<T> for Nothing {
+    type Pure = Just<T>;
 
-    fn pure<T>(t: T) -> Self::Pure<T> {
+    fn pure(t: T) -> Self::Pure {
         Just(t)
     }
 }
@@ -70,6 +71,14 @@ impl<F> Chain<F> for Nothing {
 
     fn chain(self, _: F) -> Self::Chain {
         Nothing
+    }
+}
+
+impl<T> Return<T> for Nothing {
+    type Return = Just<T>;
+
+    fn r#return(t: T) -> Self::Return {
+        Just(t)
     }
 }
 

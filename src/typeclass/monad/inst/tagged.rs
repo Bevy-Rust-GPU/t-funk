@@ -4,11 +4,11 @@ use crate::{
     closure::Closure,
     function::Id,
     typeclass::{
-        applicative::Apply,
+        applicative::{Apply, Pure},
         copointed::Copointed,
         foldable::{Fold, Foldr},
         functor::{Fmap, Replace},
-        monad::{Chain, Then},
+        monad::{Chain, Return, Then},
         monoid::{Mconcat, Mempty},
         pointed::Pointed,
         semigroup::Mappend,
@@ -113,6 +113,14 @@ impl<P, A, B> Replace<B> for Tagged<P, A> {
     }
 }
 
+impl<P, T, U> Pure<U> for Tagged<P, T> {
+    type Pure = Tagged<P, U>;
+
+    fn pure(t: U) -> Self::Pure {
+        Tagged(PhantomData, t)
+    }
+}
+
 impl<P, T, U> Apply<U> for Tagged<P, T>
 where
     T: Closure<U>,
@@ -135,6 +143,14 @@ where
 
     fn chain(self, f: F) -> Self::Chain {
         f.call(self.copoint())
+    }
+}
+
+impl<P, T, U> Return<U> for Tagged<P, T> {
+    type Return = Tagged<P, U>;
+
+    fn r#return(t: U) -> Self::Return {
+        Tagged(PhantomData, t)
     }
 }
 

@@ -6,7 +6,7 @@ use crate::{
     function::Function,
     macros::{arrow::Arrow, category::Category, Closure},
     typeclass::{
-        applicative::{Apply, LiftA2, Pure},
+        applicative::{Apply, LiftA2, Pure, PureT},
         functor::Fmap,
         monad::Then,
     },
@@ -42,9 +42,9 @@ where
 
 impl<F, P> Function<F> for ReplicateM<(), P>
 where
-    P: Pure,
+    P: Pure<Nil>,
 {
-    type Output = P::Pure<Nil>;
+    type Output = PureT<P, Nil>;
 
     fn call(_: F) -> Self::Output {
         P::pure(Nil)

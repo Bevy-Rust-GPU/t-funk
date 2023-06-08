@@ -54,7 +54,7 @@
 
 extern crate self as t_funk;
 
-pub mod r#do;
+pub mod op_chain;
 pub mod closure;
 pub mod function;
 pub mod lens;

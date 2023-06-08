@@ -1,11 +1,10 @@
 use crate::{
     closure::{Closure, Curry2, Curry2A},
-    function::{Function, Id, MakePair, Swap},
+    function::{Function, Id, Swap, MakePair},
     macros::{category::Category, Closure, Copointed, Pointed},
     typeclass::{
-        arrow::{Arr, Fanout, First, Split},
+        arrow::{Arr, Fanout, FanoutT, First, Split},
         category::{Compose, ComposeL},
-        monad::Tuple,
     },
 };
 
@@ -13,10 +12,10 @@ use crate::{
 pub struct Circuit<F>(pub F);
 
 impl<F> crate::typeclass::category::Id for Circuit<F> {
-    type Id = Circuit<Curry2A<Tuple, Id>>;
+    type Id = Circuit<Curry2A<MakePair, Id>>;
 
     fn id() -> Self::Id {
-        Circuit(Tuple.prefix2(Id))
+        Circuit(MakePair.prefix2(Id))
     }
 }
 
@@ -119,12 +118,12 @@ impl<T, F> Fanout<Circuit<F>> for Circuit<T> {
                 CircuitArr<Swap>,
                 CircuitCompose<CircuitFirst<F>, CircuitCompose<CircuitArr<Swap>, CircuitFirst<T>>>,
             >,
-            CircuitArr<MakePair>,
+            CircuitArr<FanoutT<Id, Id>>,
         >,
     >;
 
     fn fanout(self, f: Circuit<F>) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(crate::typeclass::arrow::Split::split(self, f))
+        Self::arr(Id.fanout(Id)).compose_l(crate::typeclass::arrow::Split::split(self, f))
     }
 }
 

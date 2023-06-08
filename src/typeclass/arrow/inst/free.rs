@@ -1,12 +1,13 @@
 use core::marker::PhantomData;
 
+use t_funk_macros::{define_adt, impl_adt};
+
 use crate::{
     closure::Closure,
     collection::hlist::Nil,
     function::Id as IdF,
-    function::MakePair,
     typeclass::{
-        arrow::{Arr, Fanout, First, Second, Split},
+        arrow::{Arr, Fanout, FanoutT, First, Second, Split},
         category::{Compose, ComposeL, Id},
         copointed::Copointed,
         pointed::Pointed,
@@ -14,239 +15,81 @@ use crate::{
     },
 };
 
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Pure<F>(pub F);
+define_adt! {
+    #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    pub struct Pure<F>(pub F)
+             | Effect<F1>(pub F1)
+             | Seq<F1, F2>(pub F1, pub F2)
+             | Par<F1, F2>(pub F1, pub F2);
+}
 
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Effect<F1>(pub F1);
+impl_adt! {
+    impl<F1, F2> Id for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type Id = Pure<IdF>;
 
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Seq<F1, F2>(pub F1, pub F2);
-
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Par<F1, F2>(pub F1, pub F2);
-
-impl<F> Id for Pure<F> {
-    type Id = Pure<IdF>;
-
-    fn id() -> Self::Id {
-        Pure(IdF)
+        fn id() -> Self::Id {
+            Pure(IdF)
+        }
     }
 }
 
-impl<F> Id for Effect<F> {
-    type Id = Pure<crate::function::Id>;
+impl_adt! {
+    impl<F1, F2, F> Compose<F> for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type Compose = Seq<F, Self>;
 
-    fn id() -> Self::Id {
-        Pure(IdF)
+        fn compose(self, f: F) -> Self::Compose {
+            Seq(f, self)
+        }
     }
 }
 
-impl<F1, F2> Id for Seq<F1, F2> {
-    type Id = Pure<crate::function::Id>;
+impl_adt! {
+    impl<F1, F2, F> Arr<F> for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type Arr = Pure<F>;
 
-    fn id() -> Self::Id {
-        Pure(IdF)
+        fn arr(f: F) -> Self::Arr {
+            Pure(f)
+        }
     }
 }
 
-impl<F1, F2> Id for Par<F1, F2> {
-    type Id = Pure<crate::function::Id>;
+impl_adt! {
+    impl<F1, F2> First for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type First = Par<Self, IdF>;
 
-    fn id() -> Self::Id {
-        Pure(IdF)
+        fn first(self) -> Self::First {
+            Par(self, IdF)
+        }
     }
 }
 
-impl<F1, F2> Compose<F2> for Pure<F1> {
-    type Compose = Seq<F2, Pure<F1>>;
+impl_adt! {
+    impl<F1, F2> Second for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type Second = Par<IdF, Self>;
 
-    fn compose(self, f: F2) -> Self::Compose {
-        Seq(f, self)
+        fn second(self) -> Self::Second {
+            Par(IdF, self)
+        }
     }
 }
 
-impl<F1, F2> Compose<F2> for Effect<F1> {
-    type Compose = Seq<F2, Effect<F1>>;
+impl_adt! {
+    impl<F1, F2, F> Split<F> for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+        type Split = Par<Self, F>;
 
-    fn compose(self, f: F2) -> Self::Compose {
-        Seq(f, self)
+        fn split(self, g: F) -> Self::Split {
+            Par(self, g)
+        }
     }
 }
 
-impl<F1, F2, F3> Compose<F3> for Seq<F1, F2> {
-    type Compose = Seq<F3, Seq<F1, F2>>;
+impl_adt! {
+    impl<F1, F2, F> Fanout<F> for Pure<F1> | Effect<F1> | Seq<F1, F2> | Par<F1, F2> {
+    type Fanout = Seq<Pure<FanoutT<IdF, IdF>>, Par<Self, F>>;
 
-    fn compose(self, f: F3) -> Self::Compose {
-        Seq(f, self)
-    }
-}
-
-impl<F1, F2, F3> Compose<F3> for Par<F1, F2> {
-    type Compose = Seq<F3, Par<F1, F2>>;
-
-    fn compose(self, f: F3) -> Self::Compose {
-        Seq(f, self)
-    }
-}
-
-impl<F1, F2> Arr<F2> for Pure<F1> {
-    type Arr = Pure<F2>;
-
-    fn arr(f: F2) -> Self::Arr {
-        Pure(f)
-    }
-}
-
-impl<F1, F2> Arr<F2> for Effect<F1> {
-    type Arr = Pure<F2>;
-
-    fn arr(f: F2) -> Self::Arr {
-        Pure(f)
-    }
-}
-
-impl<F1, F2, F3> Arr<F3> for Seq<F1, F2> {
-    type Arr = Pure<F3>;
-
-    fn arr(f: F3) -> Self::Arr {
-        Pure(f)
-    }
-}
-
-impl<F1, F2, F3> Arr<F3> for Par<F1, F2> {
-    type Arr = Pure<F3>;
-
-    fn arr(f: F3) -> Self::Arr {
-        Pure(f)
-    }
-}
-
-impl<F1> First for Pure<F1> {
-    type First = Par<Pure<F1>, IdF>;
-
-    fn first(self) -> Self::First {
-        Par(self, IdF)
-    }
-}
-
-impl<F1> First for Effect<F1> {
-    type First = Par<Effect<F1>, IdF>;
-
-    fn first(self) -> Self::First {
-        Par(self, IdF)
-    }
-}
-
-impl<F1, F2> First for Seq<F1, F2> {
-    type First = Par<Seq<F1, F2>, IdF>;
-
-    fn first(self) -> Self::First {
-        Par(self, IdF)
-    }
-}
-
-impl<F1, F2> First for Par<F1, F2> {
-    type First = Par<Par<F1, F2>, IdF>;
-
-    fn first(self) -> Self::First {
-        Par(self, IdF)
-    }
-}
-
-impl<F1> Second for Pure<F1> {
-    type Second = Par<IdF, Pure<F1>>;
-
-    fn second(self) -> Self::Second {
-        Par(IdF, self)
-    }
-}
-
-impl<F1> Second for Effect<F1> {
-    type Second = Par<IdF, Effect<F1>>;
-
-    fn second(self) -> Self::Second {
-        Par(IdF, self)
-    }
-}
-
-impl<F1, F2> Second for Seq<F1, F2> {
-    type Second = Par<IdF, Seq<F1, F2>>;
-
-    fn second(self) -> Self::Second {
-        Par(IdF, self)
-    }
-}
-
-impl<F1, F2> Second for Par<F1, F2> {
-    type Second = Par<IdF, Par<F1, F2>>;
-
-    fn second(self) -> Self::Second {
-        Par(IdF, self)
-    }
-}
-
-impl<F1, F2> Split<F2> for Pure<F1> {
-    type Split = Par<Pure<F1>, F2>;
-
-    fn split(self, g: F2) -> Self::Split {
-        Par(self, g)
-    }
-}
-
-impl<F1, F2> Split<F2> for Effect<F1> {
-    type Split = Par<Effect<F1>, F2>;
-
-    fn split(self, g: F2) -> Self::Split {
-        Par(self, g)
-    }
-}
-
-impl<F1, F2, F3> Split<F3> for Seq<F1, F2> {
-    type Split = Par<Seq<F1, F2>, F3>;
-
-    fn split(self, g: F3) -> Self::Split {
-        Par(self, g)
-    }
-}
-
-impl<F1, F2, F3> Split<F3> for Par<F1, F2> {
-    type Split = Par<Par<F1, F2>, F3>;
-
-    fn split(self, g: F3) -> Self::Split {
-        Par(self, g)
-    }
-}
-
-impl<F1, F2> Fanout<F2> for Pure<F1> {
-    type Fanout = Seq<Pure<MakePair>, Par<Pure<F1>, F2>>;
-
-    fn fanout(self, f: F2) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(self.split(f))
-    }
-}
-
-impl<F1, F2> Fanout<F2> for Effect<F1> {
-    type Fanout = Seq<Pure<MakePair>, Par<Effect<F1>, F2>>;
-
-    fn fanout(self, f: F2) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(self.split(f))
-    }
-}
-
-impl<F1, F2, F3> Fanout<F3> for Seq<F1, F2> {
-    type Fanout = Seq<Pure<MakePair>, Par<Seq<F1, F2>, F3>>;
-
-    fn fanout(self, f: F3) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(self.split(f))
-    }
-}
-
-impl<F1, F2, F3> Fanout<F3> for Par<F1, F2> {
-    type Fanout = Seq<Pure<MakePair>, Par<Par<F1, F2>, F3>>;
-
-    fn fanout(self, f: F3) -> Self::Fanout {
-        Self::arr(MakePair).compose_l(self.split(f))
+        fn fanout(self, f: F) -> Self::Fanout {
+            Self::arr(IdF.fanout(IdF)).compose_l(self.split(f))
+        }
     }
 }
 

@@ -1,4 +1,10 @@
-pub use t_funk_macros::{lift, functions, types, define_adt, impl_adt, Closure, Copointed, Lenses, Pointed};
+pub use t_funk_macros::{
+    define_adt, functions, impl_adt, lift, types, Closure, Copointed, Lenses, Pointed,
+};
+
+pub mod phantom {
+    pub use t_funk_macros::{PhantomClone, PhantomCopy, PhantomDefault};
+}
 
 pub mod applicative {
     pub use t_funk_macros::{Applicative, Apply, Pure};

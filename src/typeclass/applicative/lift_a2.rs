@@ -19,13 +19,14 @@ where
 mod test {
     use crate::{
         closure::{Closure, Curry2},
+        function::MakePair,
+        typeclass::applicative::LiftA2,
         typeclass::monad::Just,
-        typeclass::{applicative::LiftA2, monad::Tuple},
     };
 
     #[test]
     fn test_lift_a2() {
-        let foo = LiftA2.call((Tuple.curry2(), Just(3), Just(5)));
+        let foo = LiftA2.call((MakePair.curry2(), Just(3), Just(5)));
         assert_eq!(foo, Just((3, 5)));
     }
 }

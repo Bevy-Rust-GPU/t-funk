@@ -4,7 +4,7 @@ use crate::{
     macros::{arrow::Arrow, category::Category, monad::Then, Closure},
     typeclass::{
         functor::Fmap,
-        monad::{Chain, ChainF},
+        monad::{r#return::Return, Chain, ChainF},
     },
 };
 
@@ -22,8 +22,16 @@ where
     }
 }
 
+impl<T, U> Return<U> for Free<T> {
+    type Return = Free<U>;
+
+    fn r#return(t: U) -> Self::Return {
+        Free(t)
+    }
+}
+
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Then)]
-pub struct Return<F>(pub F);
+pub struct ReturnS<F>(pub F);
 
 #[derive(
     Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Closure, Category, Arrow,
@@ -31,13 +39,13 @@ pub struct Return<F>(pub F);
 pub struct MakeReturn;
 
 impl<T> Function<T> for MakeReturn {
-    type Output = Return<T>;
+    type Output = ReturnS<T>;
 
     fn call(input: T) -> Self::Output {
-        Return(input)
+        ReturnS(input)
     }
 }
-impl<T, F> Chain<F> for Return<T>
+impl<T, F> Chain<F> for ReturnS<T>
 where
     F: Closure<T>,
 {
@@ -79,7 +87,7 @@ mod test {
         },
     };
 
-    use super::Return;
+    use super::ReturnS;
 
     // DSL
     type String = &'static str;
@@ -113,7 +121,7 @@ mod test {
         }
     }
 
-    fn set(key: String, value: String) -> Free<Set<Return<()>>> {
+    fn set(key: String, value: String) -> Free<Set<ReturnS<()>>> {
         LiftFree.call(Set(key, value, ()))
     }
 
@@ -169,13 +177,13 @@ mod test {
         }
     }
 
-    impl<T> Function<Return<T>> for RunIo
+    impl<T> Function<ReturnS<T>> for RunIo
     where
         T: core::fmt::Debug,
     {
         type Output = Free<()>;
 
-        fn call(_: Return<T>) -> Self::Output {
+        fn call(_: ReturnS<T>) -> Self::Output {
             Free(())
         }
     }

@@ -33,10 +33,10 @@ impl<F1, F2> Apply<Endo<F2>> for Endo<F1> {
     }
 }
 
-impl<T> Pure for Endo<T> {
-    type Pure<U> = Endo<U>;
+impl<T, U> Pure<U> for Endo<T> {
+    type Pure = Endo<U>;
 
-    fn pure<U>(t: U) -> Self::Pure<U> {
+    fn pure(t: U) -> Self::Pure {
         Endo(t)
     }
 }
