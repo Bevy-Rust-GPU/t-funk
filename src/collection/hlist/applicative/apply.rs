@@ -1,8 +1,11 @@
 use crate::{
     collection::hlist::{Cons, Nil},
     typeclass::applicative::Apply,
-    typeclass::functor::Fmap,
     typeclass::semigroup::Mappend,
+    typeclass::{
+        functor::Fmap,
+        monoid::{Mempty, MemptyT},
+    },
 };
 
 impl<Head, Tail, U> Apply<U> for Cons<Head, Tail>
@@ -18,17 +21,25 @@ where
     }
 }
 
-impl<T> Apply<T> for Nil {
-    type Apply = Nil;
+impl<T> Apply<T> for Nil
+where
+    T: Mempty,
+{
+    type Apply = MemptyT<T>;
 
     fn apply(self, _: T) -> Self::Apply {
-        self
+        T::mempty()
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::{collection::hlist::{Cons, Nil}, function::Mul, closure::Curry2, typeclass::applicative::Apply};
+    use crate::{
+        closure::Curry2,
+        collection::hlist::{Cons, Nil},
+        function::Mul,
+        typeclass::applicative::Apply,
+    };
 
     #[test]
     fn test_hlist_apply() {

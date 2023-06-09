@@ -11,3 +11,4 @@ pub mod monoid;
 pub mod pointed;
 pub mod semigroup;
 pub mod traversable;
+mod monad_plus;
