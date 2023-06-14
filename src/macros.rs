@@ -44,6 +44,10 @@ pub mod semigroup {
 
 pub mod traversable {}
 
+pub mod set {
+    pub use t_funk_macros::set;
+}
+
 /// Convert `do` notation into the equivalent
 /// `x.chain(|y| z(y).chain(...))` composition.
 ///
