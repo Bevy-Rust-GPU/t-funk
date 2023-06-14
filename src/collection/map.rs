@@ -1,37 +1,58 @@
 //! Type-level map, which associates type keys with values
 
-use crate::{macros::functions, peano::*};
+use crate::{
+    macros::{functions, types},
+    peano::*,
+};
 
 #[functions]
-pub trait Get<T> {
+#[types]
+pub trait Get<K> {
     type Get;
 
     fn get(self) -> Self::Get;
 }
 
 #[functions]
-pub trait Set<K, V> {
-    type Set;
+#[types]
+pub trait Insert<K, V> {
+    type Insert;
 
-    fn set(self, t: V) -> Self::Set;
+    fn insert(self, t: V) -> Self::Insert;
 }
 
 #[functions]
+#[types]
 pub trait Remove<K> {
+    type Removed;
     type Remove;
 
-    fn remove(self) -> Self::Remove;
+    fn remove(self) -> (Self::Removed, Self::Remove);
 }
 
-impl<T, K> Remove<K> for T
-where
-    T: Set<K, ()>,
-{
-    type Remove = T::Set;
+#[functions]
+#[types]
+pub trait Drop<K> {
+    type Drop;
 
-    fn remove(self) -> Self::Remove {
-        self.set(())
+    fn drop(self) -> Self::Drop;
+}
+
+impl<T, K> Drop<K> for T
+where
+    T: Remove<K>,
+{
+    type Drop = RemovedT<T, K>;
+
+    fn drop(self) -> Self::Drop {
+        self.remove().0
     }
+}
+
+pub trait Empty {
+    type Empty;
+
+    fn empty() -> Self::Empty;
 }
 
 macro_rules! impl_get {
@@ -86,14 +107,15 @@ mod test {
     enum String {}
 
     #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    struct Context<A, B, C, D> {
+    //#[map]
+    struct ContextInner<A, B> {
+        //#[key = Int]
         int: A,
+        //#[key = Float]
         float: B,
-        char: C,
-        string: D,
     }
 
-    impl<A, B, C, D> Get<Int> for Context<A, B, C, D> {
+    impl<A, B> Get<Int> for ContextInner<A, B> {
         type Get = A;
 
         fn get(self) -> Self::Get {
@@ -101,7 +123,7 @@ mod test {
         }
     }
 
-    impl<A, B, C, D> Get<Float> for Context<A, B, C, D> {
+    impl<A, B> Get<Float> for ContextInner<A, B> {
         type Get = B;
 
         fn get(self) -> Self::Get {
@@ -109,7 +131,86 @@ mod test {
         }
     }
 
-    impl<A, B, C, D> Get<Char> for Context<A, B, C, D> {
+    impl<A, B, T> Insert<Int, T> for ContextInner<A, B> {
+        type Insert = ContextInner<T, B>;
+
+        fn insert(self, t: T) -> Self::Insert {
+            ContextInner {
+                int: t,
+                float: self.float,
+            }
+        }
+    }
+
+    impl<A, B, T> Insert<Float, T> for ContextInner<A, B> {
+        type Insert = ContextInner<A, T>;
+
+        fn insert(self, t: T) -> Self::Insert {
+            ContextInner {
+                int: self.int,
+                float: t,
+            }
+        }
+    }
+
+    impl<A, B> Remove<Int> for ContextInner<A, B> {
+        type Removed = ContextInner<(), B>;
+        type Remove = A;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextInner { int, float } = self;
+
+            (ContextInner { int: (), float }, int)
+        }
+    }
+
+    impl<A, B> Remove<Float> for ContextInner<A, B> {
+        type Removed = ContextInner<A, ()>;
+        type Remove = B;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextInner { int, float } = self;
+
+            (ContextInner { int, float: () }, float)
+        }
+    }
+
+    impl<A, B> Empty for ContextInner<A, B> {
+        type Empty = ContextInner<(), ()>;
+
+        fn empty() -> Self::Empty {
+            ContextInner { int: (), float: () }
+        }
+    }
+
+    #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+    //#[map]
+    struct ContextOuter<A, B, C, D> {
+        //#[map = [A = Int, B = Float]]
+        context_inner: ContextInner<A, B>,
+        //#[key = Char]
+        char: C,
+        //#[key = String]
+        string: D,
+    }
+
+    impl<A, B, C, D> Get<Int> for ContextOuter<A, B, C, D> {
+        type Get = A;
+
+        fn get(self) -> Self::Get {
+            Get::<Int>::get(self.context_inner)
+        }
+    }
+
+    impl<A, B, C, D> Get<Float> for ContextOuter<A, B, C, D> {
+        type Get = B;
+
+        fn get(self) -> Self::Get {
+            Get::<Float>::get(self.context_inner)
+        }
+    }
+
+    impl<A, B, C, D> Get<Char> for ContextOuter<A, B, C, D> {
         type Get = C;
 
         fn get(self) -> Self::Get {
@@ -117,7 +218,7 @@ mod test {
         }
     }
 
-    impl<A, B, C, D> Get<String> for Context<A, B, C, D> {
+    impl<A, B, C, D> Get<String> for ContextOuter<A, B, C, D> {
         type Get = D;
 
         fn get(self) -> Self::Get {
@@ -125,63 +226,174 @@ mod test {
         }
     }
 
-    impl<A, B, C, D, T> Set<Int, T> for Context<A, B, C, D> {
-        type Set = Context<T, B, C, D>;
+    impl<A, B, C, D, T> Insert<Int, T> for ContextOuter<A, B, C, D> {
+        type Insert = ContextOuter<T, B, C, D>;
 
-        fn set(self, t: T) -> Self::Set {
-            Context {
-                int: t,
-                float: self.float,
-                char: self.char,
-                string: self.string,
+        fn insert(self, t: T) -> Self::Insert {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            ContextOuter {
+                context_inner: Insert::<Int, T>::insert(context_inner, t),
+                char,
+                string,
             }
         }
     }
 
-    impl<A, B, C, D, T> Set<Float, T> for Context<A, B, C, D> {
-        type Set = Context<A, T, C, D>;
+    impl<A, B, C, D, T> Insert<Float, T> for ContextOuter<A, B, C, D> {
+        type Insert = ContextOuter<A, T, C, D>;
 
-        fn set(self, t: T) -> Self::Set {
-            Context {
-                int: self.int,
-                float: t,
-                char: self.char,
-                string: self.string,
+        fn insert(self, t: T) -> Self::Insert {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            ContextOuter {
+                context_inner: Insert::<Float, T>::insert(context_inner, t),
+                char,
+                string,
             }
         }
     }
 
-    impl<A, B, C, D, T> Set<Char, T> for Context<A, B, C, D> {
-        type Set = Context<A, B, T, D>;
+    impl<A, B, C, D, T> Insert<Char, T> for ContextOuter<A, B, C, D> {
+        type Insert = ContextOuter<A, B, T, D>;
 
-        fn set(self, t: T) -> Self::Set {
-            Context {
-                int: self.int,
-                float: self.float,
+        fn insert(self, t: T) -> Self::Insert {
+            ContextOuter {
+                context_inner: self.context_inner,
                 char: t,
                 string: self.string,
             }
         }
     }
 
-    impl<A, B, C, D, T> Set<String, T> for Context<A, B, C, D> {
-        type Set = Context<A, B, C, T>;
+    impl<A, B, C, D, T> Insert<String, T> for ContextOuter<A, B, C, D> {
+        type Insert = ContextOuter<A, B, C, T>;
 
-        fn set(self, t: T) -> Self::Set {
-            Context {
-                int: self.int,
-                float: self.float,
+        fn insert(self, t: T) -> Self::Insert {
+            ContextOuter {
+                context_inner: self.context_inner,
                 char: self.char,
                 string: t,
             }
         }
     }
 
+    impl<A, B, C, D> Remove<Int> for ContextOuter<A, B, C, D> {
+        type Removed = ContextOuter<(), B, C, D>;
+        type Remove = A;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            let (context_inner, int) = Remove::<Int>::remove(context_inner);
+
+            (
+                ContextOuter {
+                    context_inner,
+                    char,
+                    string,
+                },
+                int,
+            )
+        }
+    }
+
+    impl<A, B, C, D> Remove<Float> for ContextOuter<A, B, C, D> {
+        type Removed = ContextOuter<A, (), C, D>;
+        type Remove = B;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            let (context_inner, float) = Remove::<Float>::remove(context_inner);
+
+            (
+                ContextOuter {
+                    context_inner,
+                    char,
+                    string,
+                },
+                float,
+            )
+        }
+    }
+
+    impl<A, B, C, D> Remove<Char> for ContextOuter<A, B, C, D> {
+        type Removed = ContextOuter<A, B, (), D>;
+        type Remove = C;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            (
+                ContextOuter {
+                    context_inner,
+                    char: (),
+                    string,
+                },
+                char,
+            )
+        }
+    }
+
+    impl<A, B, C, D> Remove<String> for ContextOuter<A, B, C, D> {
+        type Removed = ContextOuter<A, B, C, ()>;
+        type Remove = D;
+
+        fn remove(self) -> (Self::Removed, Self::Remove) {
+            let ContextOuter {
+                context_inner,
+                char,
+                string,
+            } = self;
+
+            (
+                ContextOuter {
+                    context_inner,
+                    char,
+                    string: (),
+                },
+                string,
+            )
+        }
+    }
+
+    impl<A, B, C, D> Empty for ContextOuter<A, B, C, D> {
+        type Empty = ContextOuter<(), (), (), ()>;
+
+        fn empty() -> Self::Empty {
+            ContextOuter {
+                context_inner: <ContextInner<A, B> as Empty>::empty(),
+                char: (),
+                string: (),
+            }
+        }
+    }
+
     #[test]
     fn test_map() {
-        let context = Context {
-            int: 1,
-            float: 2.0,
+        let context = ContextOuter {
+            context_inner: ContextInner { int: 1, float: 2.0 },
             char: '3',
             string: "4",
         };
@@ -196,24 +408,39 @@ mod test {
         assert_eq!(char, '3');
         assert_eq!(string, "4");
 
-        let context = Set::<Int, i32>::set(context, 2);
-        let context = Set::<Float, _>::set(context, 3.0);
-        let context = Set::<Char, _>::set(context, '4');
-        let context = Set::<String, _>::set(context, "5");
+        let inserted = Insert::<Int, i32>::insert(context, 2);
+        let inserted = Insert::<Float, _>::insert(inserted, 3.0);
+        let inserted = Insert::<Char, _>::insert(inserted, '4');
+        let inserted = Insert::<String, _>::insert(inserted, "5");
 
-        assert_eq!(context.int, 2);
-        assert_eq!(context.float, 3.0);
-        assert_eq!(context.char, '4');
-        assert_eq!(context.string, "5");
+        assert_eq!(inserted.context_inner.int, 2);
+        assert_eq!(inserted.context_inner.float, 3.0);
+        assert_eq!(inserted.char, '4');
+        assert_eq!(inserted.string, "5");
 
-        let context = Remove::<Int>::remove(context);
-        let context = Remove::<Float>::remove(context);
-        let context = Remove::<Char>::remove(context);
-        let context = Remove::<String>::remove(context);
+        let (removed, int) = Remove::<Int>::remove(context);
+        let (removed, float) = Remove::<Float>::remove(removed);
+        let (removed, char) = Remove::<Char>::remove(removed);
+        let (removed, string) = Remove::<String>::remove(removed);
 
-        assert_eq!(context.int, ());
-        assert_eq!(context.float, ());
-        assert_eq!(context.char, ());
-        assert_eq!(context.string, ());
+        assert_eq!(int, 2);
+        assert_eq!(float, 3.0);
+        assert_eq!(char, '4');
+        assert_eq!(string, "5");
+
+        assert_eq!(removed.context_inner.int, ());
+        assert_eq!(removed.context_inner.float, ());
+        assert_eq!(removed.char, ());
+        assert_eq!(removed.string, ());
+
+        let empty = ContextOuter::<i32, f32, char, &'static str>::empty();
+        assert_eq!(
+            empty,
+            ContextOuter {
+                context_inner: ContextInner { int: (), float: () },
+                char: (),
+                string: ()
+            }
+        );
     }
 }
