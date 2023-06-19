@@ -1,7 +1,7 @@
 use crate::{
     macros::{
         applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad,
-        monoid::Monoid, Copointed, Pointed,
+        Copointed, Pointed,
     },
     typeclass::semigroup::Mappend,
 };
@@ -22,7 +22,6 @@ use crate::{
     Functor,
     Applicative,
     Monad,
-    Monoid,
     Foldable,
 )]
 pub struct Any<T>(pub T);

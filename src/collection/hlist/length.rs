@@ -20,7 +20,7 @@ impl HListLength for Nil {
 mod tests {
     use crate::collection::{
         hlist::{HListLength, Nil},
-        tuple::ToHList,
+        tlist::ToHList,
     };
 
     #[test]

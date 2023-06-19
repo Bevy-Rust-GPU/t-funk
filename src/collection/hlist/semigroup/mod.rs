@@ -24,7 +24,7 @@ impl<U> Mappend<U> for Nil {
 #[cfg(test)]
 mod test {
     use crate::{
-        collection::tuple::ToHList,
+        collection::tlist::ToHList,
         {
             typeclass::semigroup::Sum,
             typeclass::{copointed::Copointed, functor::Fmap, monoid::Mconcat, pointed::PointF},

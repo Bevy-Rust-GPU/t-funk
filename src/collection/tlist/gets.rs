@@ -47,7 +47,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::GetsImpl;
+    use crate::collection::tlist::GetsImpl;
 
     #[test]
     fn test_tuple_gets() {

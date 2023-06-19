@@ -423,10 +423,10 @@ mod test {
         let (removed, char) = Remove::<Char>::remove(removed);
         let (removed, string) = Remove::<String>::remove(removed);
 
-        assert_eq!(int, 2);
-        assert_eq!(float, 3.0);
-        assert_eq!(char, '4');
-        assert_eq!(string, "5");
+        assert_eq!(int, 1);
+        assert_eq!(float, 2.0);
+        assert_eq!(char, '3');
+        assert_eq!(string, "4");
 
         assert_eq!(removed.context_inner.int, ());
         assert_eq!(removed.context_inner.float, ());

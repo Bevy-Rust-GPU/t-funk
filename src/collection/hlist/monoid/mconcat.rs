@@ -9,12 +9,13 @@ use crate::{
 
 impl<Head, Tail> Mconcat for Cons<Head, Tail>
 where
-    Self: Mempty + Foldl<MappendF, <Self as Mempty>::Mempty>,
+    Head: Mempty,
+    Self: Foldl<MappendF, MemptyT<Head>>,
 {
-    type Mconcat = FoldlT<Self, MappendF, MemptyT<Self>>;
+    type Mconcat = FoldlT<Self, MappendF, MemptyT<Head>>;
 
     fn mconcat(self) -> Self::Mconcat {
-        self.foldl(MappendF::default(), Self::mempty())
+        self.foldl(MappendF::default(), Head::mempty())
     }
 }
 

@@ -1,6 +1,6 @@
 use crate::collection::{
     hlist::{PopFront as HListPopFront, ToTuple},
-    tuple::Tuple,
+    tlist::Tuple,
 };
 
 pub trait PopFront: Tuple {
@@ -24,7 +24,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::collection::tuple::pop_front::PopFront;
+    use crate::collection::tlist::pop_front::PopFront;
 
     #[test]
     fn test_tuple_pop_back() {

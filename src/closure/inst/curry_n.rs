@@ -6,7 +6,7 @@ use crate::{
     closure::Closure,
     collection::{
         hlist::{Cons, HList, Nil, PushBack, ToTuple},
-        tuple::ToHList,
+        tlist::ToHList,
     },
     macros::{arrow::Arrow, category::Category},
     typeclass::pointed::Pointed,

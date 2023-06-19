@@ -1,16 +1,26 @@
 use crate::{
+    closure::{Closure, OutputT},
     collection::hlist::Cons,
-    typeclass::{foldable::FoldMap, functor::Fmap, monoid::Mconcat},
+    typeclass::{
+        foldable::{FoldMap, Foldl, FoldlT},
+        functor::{Fmap, FmapT},
+        monoid::{Mempty, MemptyT},
+        semigroup::MappendF,
+    },
 };
 
 impl<Head, Tail, _Function> FoldMap<_Function> for Cons<Head, Tail>
 where
-    Cons<Head, Tail>: Fmap<_Function>,
-    <Cons<Head, Tail> as Fmap<_Function>>::Fmap: Mconcat,
+    Self: Fmap<_Function> + Mempty,
+    FmapT<Self, _Function>: Foldl<MappendF, MemptyT<OutputT<_Function, Head>>>,
+    _Function: Closure<Head>,
+    OutputT<_Function, Head>: Mempty,
 {
-    type FoldMap = <<Cons<Head, Tail> as Fmap<_Function>>::Fmap as Mconcat>::Mconcat;
+    type FoldMap =
+        FoldlT<FmapT<Cons<Head, Tail>, _Function>, MappendF, MemptyT<OutputT<_Function, Head>>>;
 
     fn fold_map(self, f: _Function) -> Self::FoldMap {
-        self.fmap(f).mconcat()
+        self.fmap(f)
+            .foldl(MappendF::default(), OutputT::<_Function, Head>::mempty())
     }
 }

@@ -27,7 +27,7 @@ impl<F, T> Foldl<F, T> for Nil {
 
 #[cfg(test)]
 mod test {
-    use crate::{collection::tuple::ToHList, function::Sub, typeclass::foldable::Foldl};
+    use crate::{collection::tlist::ToHList, function::Sub, typeclass::foldable::Foldl};
 
     #[test]
     fn test_hlist_foldl() {

@@ -1,6 +1,11 @@
-use crate::macros::{
-    applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
-    semigroup::Semigroup, Copointed, Pointed,
+use t_funk_macros::Monoid;
+
+use crate::{
+    macros::{
+        applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, Copointed,
+        Pointed,
+    },
+    typeclass::semigroup::{Mappend, MappendT},
 };
 
 #[derive(
@@ -18,8 +23,18 @@ use crate::macros::{
     Functor,
     Applicative,
     Monad,
-    Semigroup,
     Monoid,
     Foldable,
 )]
 pub struct Dual<T>(pub T);
+
+impl<T, U> Mappend<Dual<U>> for Dual<T>
+where
+    U: Mappend<T>,
+{
+    type Mappend = Dual<MappendT<U, T>>;
+
+    fn mappend(self, t: Dual<U>) -> Self::Mappend {
+        Dual(t.0.mappend(self.0))
+    }
+}

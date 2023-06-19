@@ -82,7 +82,7 @@ impl<T, U> Mappend<Endo<U>> for Endo<T> {
 #[cfg(test)]
 mod test {
     use crate::{
-        collection::tuple::ToHList,
+        collection::tlist::ToHList,
         {
             closure::{Closure, Compose, Composed, Curried2, Curry2, Curry2A},
             function::Add,

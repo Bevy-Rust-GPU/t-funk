@@ -31,7 +31,7 @@ impl<T> PopBack for Cons<T, Nil> {
 mod test {
     use crate::collection::{
         hlist::{Cons, Nil},
-        tuple::ToHList,
+        tlist::ToHList,
     };
 
     use super::PopBack;

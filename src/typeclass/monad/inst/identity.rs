@@ -1,11 +1,16 @@
-use crate::macros::{
-    applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
-    semigroup::Semigroup, Copointed, Pointed,
+use crate::{
+    closure::{Closure, OutputT},
+    macros::{
+        applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad,
+        semigroup::Semigroup, Copointed, Pointed,
+    },
+    typeclass::foldable::{Foldl, Foldr},
 };
 
 /// Identity monad, used to lift values into a monadic context.
 #[derive(
     Debug,
+    Default,
     Copy,
     Clone,
     PartialEq,
@@ -19,16 +24,41 @@ use crate::macros::{
     Applicative,
     Monad,
     Semigroup,
-    Monoid,
     Foldable,
 )]
 pub struct Identity<T>(pub T);
+
+/*
+impl<T, F, Z> Foldl<F, Z> for Identity<T>
+where
+    F: Closure<(T, Z)>,
+{
+    type Foldl = OutputT<F, (T, Z)>;
+
+    fn foldl(self, f: F, z: Z) -> Self::Foldl {
+        let Identity(t) = self;
+        f.call((t, z))
+    }
+}
+
+impl<T, F, Z> Foldr<F, Z> for Identity<T>
+where
+    F: Closure<(Z, T)>,
+{
+    type Foldr = OutputT<F, (Z, T)>;
+
+    fn foldr(self, f: F, z: Z) -> Self::Foldr {
+        let Identity(t) = self;
+        f.call((z, t))
+    }
+}
+*/
 
 #[cfg(test)]
 mod test {
     use crate::{
         closure::{Closure, Compose, Curry2, Curry2B, CurryN, Flip},
-        collection::tuple::ToHList,
+        collection::tlist::ToHList,
         function::{Add, Div, Mul, Sub},
         typeclass::{
             applicative::Apply,

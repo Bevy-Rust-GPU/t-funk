@@ -1,6 +1,6 @@
 use crate::collection::{
     hlist::{HListClone, ToTuple},
-    tuple::{Tuple, RefTuple},
+    tlist::{Tuple, RefTuple},
 };
 
 pub trait TListClone<'a>: RefTuple<'a> {

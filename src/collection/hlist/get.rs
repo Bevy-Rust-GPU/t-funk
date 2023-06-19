@@ -29,7 +29,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::{hlist::Get, tuple::ToHList};
+    use crate::collection::{hlist::Get, tlist::ToHList};
 
     #[test]
     fn test_hlist_get() {

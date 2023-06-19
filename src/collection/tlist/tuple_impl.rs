@@ -3,7 +3,7 @@ use crate::{
     macro_cons,
     collection::{
         hlist::ToTuple,
-        tuple::{AsHListMut, AsHListRef, ToHList},
+        tlist::{AsHListMut, AsHListRef, ToHList},
     },
 };
 
@@ -64,7 +64,7 @@ pub mod test {
 
     use crate::collection::{
         hlist::ToTuple,
-        tuple::{AsHListMut, AsHListRef, ToHList},
+        tlist::{AsHListMut, AsHListRef, ToHList},
     };
 
     macro_rules! test_cons_tuple {

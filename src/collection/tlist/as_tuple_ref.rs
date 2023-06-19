@@ -1,6 +1,6 @@
 use crate::collection::{
     hlist::ToTuple,
-    tuple::{AsHListRef, Tuple},
+    tlist::{AsHListRef, Tuple},
 };
 
 pub trait AsTupleRef: AsHListRef {
@@ -24,7 +24,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::AsTupleRef;
+    use crate::collection::tlist::AsTupleRef;
 
     #[test]
     fn test_tuple_ref() {

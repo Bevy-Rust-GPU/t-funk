@@ -7,7 +7,7 @@ pub use replace::*;
 #[cfg(test)]
 mod test {
     use crate::{
-        collection::{hlist::ToTuple, tuple::ToHList},
+        collection::{hlist::ToTuple, tlist::ToHList},
         function::Function,
         macros::Closure,
         typeclass::functor::Fmap,

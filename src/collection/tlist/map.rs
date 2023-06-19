@@ -23,7 +23,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::{collection::tuple::Map, function::Function, macros::Closure};
+    use crate::{collection::tlist::Map, function::Function, macros::Closure};
 
     #[test]
     fn test_tuple_map() {

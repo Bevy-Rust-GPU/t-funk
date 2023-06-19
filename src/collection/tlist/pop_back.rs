@@ -1,6 +1,6 @@
 use crate::collection::{
     hlist::{PopBack as HListPopBack, ToTuple},
-    tuple::Tuple,
+    tlist::Tuple,
 };
 
 pub trait PopBack: Tuple {
@@ -24,7 +24,7 @@ where
 
 #[cfg(test)]
 mod test {
-    use crate::collection::tuple::pop_back::PopBack;
+    use crate::collection::tlist::pop_back::PopBack;
 
     #[test]
     fn test_tuple_pop_back() {

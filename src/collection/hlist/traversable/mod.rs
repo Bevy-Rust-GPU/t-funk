@@ -7,7 +7,7 @@ pub use traverse::*;
 #[cfg(test)]
 mod test {
     use crate::{
-        collection::{hlist::Nil, tuple::ToHList},
+        collection::{hlist::Nil, tlist::ToHList},
         function::Id,
         typeclass::traversable::{SequenceA, Traverse},
     };

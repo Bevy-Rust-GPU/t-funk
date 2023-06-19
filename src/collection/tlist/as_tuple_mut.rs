@@ -23,7 +23,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::AsTupleMut;
+    use crate::collection::tlist::AsTupleMut;
 
     #[test]
     fn test_tuple_mut() {

@@ -29,7 +29,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::Sets;
+    use crate::collection::tlist::Sets;
 
     #[test]
     fn test_tuple_sets() {

@@ -1,4 +1,4 @@
-use crate::collection::{hlist::Get as HListGet, tuple::Tuple};
+use crate::collection::{hlist::Get as HListGet, tlist::Tuple};
 
 pub trait GetImpl<T, P>: Tuple {
     fn get_impl(self) -> T;
@@ -34,7 +34,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::GetImpl;
+    use crate::collection::tlist::GetImpl;
 
     #[test]
     fn test_tuple_get() {

@@ -63,7 +63,7 @@ where
 mod test {
     use crate::collection::{
         hlist::{remove::Remove, Cons, Nil},
-        tuple::ToHList,
+        tlist::ToHList,
     };
 
     #[test]

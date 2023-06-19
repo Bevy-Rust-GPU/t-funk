@@ -1,5 +1,5 @@
 use crate::{
-    collection::{hlist::Nil, tuple::Tuple},
+    collection::{hlist::Nil, tlist::Tuple},
     function::Function,
 };
 
@@ -24,7 +24,7 @@ impl ToTuple for Nil {
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::{hlist::ToTuple, tuple::ToHList};
+    use crate::collection::{hlist::ToTuple, tlist::ToHList};
 
     #[test]
     fn test_uncons() {

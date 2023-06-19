@@ -23,7 +23,7 @@ pub mod category {
 }
 
 pub mod foldable {
-    pub use t_funk_macros::{Fold, FoldMap, Foldable, Foldl, Foldr};
+    pub use t_funk_macros::{Fold, FoldMap, Foldable, Foldl, Foldr, impl_tuple_foldl, impl_tuple_foldr};
 }
 
 pub mod functor {

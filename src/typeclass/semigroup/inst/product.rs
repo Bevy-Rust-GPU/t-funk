@@ -1,7 +1,7 @@
 use crate::{
     macros::{
         applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad,
-        monoid::Monoid, Copointed, Pointed,
+        Copointed, Pointed,
     },
     typeclass::semigroup::Mappend,
 };
@@ -24,7 +24,6 @@ use core::ops::Mul;
     Functor,
     Applicative,
     Monad,
-    Monoid,
     Foldable,
 )]
 pub struct Product<T>(pub T);

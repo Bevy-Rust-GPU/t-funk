@@ -36,7 +36,7 @@ where
 mod tests {
     use crate::collection::{
         hlist::{Cons, Nil, Sets, ToTuple},
-        tuple::ToHList,
+        tlist::ToHList,
     };
 
     #[test]

@@ -27,7 +27,7 @@ impl<F, T> Foldr<F, T> for Nil {
 
 #[cfg(test)]
 mod test {
-    use crate::{collection::tuple::ToHList, function::Sub, typeclass::foldable::Foldr};
+    use crate::{collection::tlist::ToHList, function::Sub, typeclass::foldable::Foldr};
 
     #[test]
     fn test_hlist_foldr() {

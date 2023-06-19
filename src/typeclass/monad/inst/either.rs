@@ -1,5 +1,5 @@
 use crate::macros::{
-    applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, monoid::Monoid,
+    applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad, 
     semigroup::Semigroup, Copointed, Pointed,
 };
 
@@ -19,7 +19,6 @@ use crate::macros::{
     Applicative,
     Monad,
     Semigroup,
-    Monoid,
     Foldable,
 )]
 pub struct Left<T>(pub T);
@@ -40,7 +39,6 @@ pub struct Left<T>(pub T);
     Applicative,
     Monad,
     Semigroup,
-    Monoid,
     Foldable,
 )]
 pub struct Right<T>(pub T);

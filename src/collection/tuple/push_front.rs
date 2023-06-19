@@ -1,32 +1,46 @@
-use crate::collection::hlist::{PushFront as HListPushFront, ToTuple};
+pub trait PushFront<T> {
+    type PushFront;
 
-use super::{Tuple, ToHList};
-
-pub trait PushFront<Head> {
-    type TuplePushFront: Tuple;
-
-    fn push_front(self, head: Head) -> Self::TuplePushFront;
+    fn push_front(self, t: T) -> Self::PushFront;
 }
 
-impl<T, Head> PushFront<Head> for T
-where
-    T: ToHList,
-    T::HList: HListPushFront<Head>,
-{
-    type TuplePushFront = <<T::HList as HListPushFront<Head>>::PushFront as ToTuple>::Tuple;
+impl<T> PushFront<T> for () {
+    type PushFront = (T,);
 
-    fn push_front(self, head: Head) -> Self::TuplePushFront {
-        self.to_hlist().push_front(head).to_tuple()
+    fn push_front(self, t: T) -> Self::PushFront {
+        (t,)
     }
 }
+
+macro_rules! implementation {
+    ($($ident:ident),*) => {
+        impl<_Type, $($ident,)*> PushFront<_Type> for ($($ident,)*)
+        {
+            type PushFront = (_Type, $($ident),*);
+
+            #[allow(non_snake_case)]
+            fn push_front(self, t: _Type) -> Self::PushFront {
+                let ($($ident,)*) = self;
+                (t, $($ident),*)
+            }
+        }
+    };
+}
+
+impl_tuple!(implementation => A, B, C, D, E, F, G, H, I, J, K, L, M);
 
 #[cfg(test)]
-mod tests {
-    use super::PushFront;
+mod test {
+    use crate::collection::tuple::PushFront;
 
     #[test]
-    fn test_tuple_push_front() {
-        let list = ().push_front(3).push_front(2).push_front(1);
-        assert_eq!((1, 2, 3), list);
+    fn test_tuple_mappend() {
+        let tup = ();
+        let tup = tup.push_front(1);
+        let tup = tup.push_front(2.0);
+        let tup = tup.push_front('3');
+        let tup = tup.push_front("4");
+        assert_eq!(tup, ("4", '3', 2.0, 1));
     }
 }
+

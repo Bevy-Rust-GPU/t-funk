@@ -154,7 +154,7 @@ mod test {
         closure::{Closure, Curry2, Curry2A},
         collection::{
             hlist::{Cons, Nil},
-            tuple::ToHList,
+            tlist::ToHList,
         },
         function::{Const, Function, ReplicateM},
         macros::Closure,

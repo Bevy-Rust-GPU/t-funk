@@ -50,7 +50,7 @@ where
 mod tests {
     use crate::collection::{
         hlist::{Cons, GetsImpl, Nil, ToTuple},
-        tuple::ToHList,
+        tlist::ToHList,
     };
 
     #[test]

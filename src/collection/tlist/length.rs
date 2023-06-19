@@ -15,7 +15,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use crate::collection::tuple::TListLength;
+    use crate::collection::tlist::TListLength;
 
     #[test]
     fn test_tuple_length() {

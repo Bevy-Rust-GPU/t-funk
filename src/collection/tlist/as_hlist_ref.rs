@@ -1,6 +1,6 @@
 use crate::collection::{
     hlist::{HListRef, Nil},
-    tuple::Tuple,
+    tlist::Tuple,
 };
 
 /// Immutably borrow a HList from a flat tuple.
