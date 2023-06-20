@@ -1,6 +1,6 @@
 //! Extensible operator chaining
 
-use std::ops::{Shl, Shr};
+use core::ops::{Shl, Shr};
 
 use t_funk::{
     closure::{Closure, OutputT},

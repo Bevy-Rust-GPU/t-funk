@@ -53,7 +53,22 @@ mod test {
     #[test]
     fn test_hlist_chain() {
         let list = Cons(1, Cons(2.0, Cons('3', Cons("4", Nil))));
-        let list = list.chain(MakeTree);
-        //panic!("{list:#?}");
+        let tree = list.chain(MakeTree);
+        assert_eq!(
+            tree,
+            Branch(
+                Leaf::default(),
+                1,
+                Branch(
+                    Leaf::default(),
+                    2.0,
+                    Branch(
+                        Leaf::default(),
+                        '3',
+                        Branch(Leaf::default(), "4", Leaf::default())
+                    )
+                )
+            )
+        );
     }
 }

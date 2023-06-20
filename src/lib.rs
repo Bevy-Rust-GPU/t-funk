@@ -52,14 +52,22 @@
 //! of all their component functions before any method can be called.
 //!
 
+#![no_std]
+
 extern crate self as t_funk;
 
-pub mod op_chain;
+#[cfg(feature = "alloc")]
+extern crate alloc;
+
+#[cfg(feature = "std")]
+extern crate std;
+
 pub mod closure;
+pub mod collection;
+pub mod either;
 pub mod function;
 pub mod lens;
-pub mod collection;
-pub mod typeclass;
-pub mod either;
-pub mod peano;
 pub mod macros;
+pub mod op_chain;
+pub mod peano;
+pub mod typeclass;

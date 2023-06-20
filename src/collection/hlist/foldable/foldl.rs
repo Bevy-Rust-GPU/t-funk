@@ -33,6 +33,9 @@ mod test {
     fn test_hlist_foldl() {
         let list = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10).to_hlist();
         let res = list.foldl(Sub, 0);
-        assert_eq!(res, 0 - 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10);
+        assert_eq!(
+            res,
+            (((((((((0 - 1) - 2) - 3) - 4) - 5) - 6) - 7) - 8) - 9) - 10
+        );
     }
 }

@@ -1,10 +1,6 @@
-use crate::{
-    closure::{Closure, OutputT},
-    macros::{
-        applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad,
-        semigroup::Semigroup, Copointed, Pointed,
-    },
-    typeclass::foldable::{Foldl, Foldr},
+use crate::macros::{
+    applicative::Applicative, foldable::Foldable, functor::Functor, monad::Monad,
+    semigroup::Semigroup, Copointed, Pointed,
 };
 
 /// Identity monad, used to lift values into a monadic context.
@@ -27,32 +23,6 @@ use crate::{
     Foldable,
 )]
 pub struct Identity<T>(pub T);
-
-/*
-impl<T, F, Z> Foldl<F, Z> for Identity<T>
-where
-    F: Closure<(T, Z)>,
-{
-    type Foldl = OutputT<F, (T, Z)>;
-
-    fn foldl(self, f: F, z: Z) -> Self::Foldl {
-        let Identity(t) = self;
-        f.call((t, z))
-    }
-}
-
-impl<T, F, Z> Foldr<F, Z> for Identity<T>
-where
-    F: Closure<(Z, T)>,
-{
-    type Foldr = OutputT<F, (Z, T)>;
-
-    fn foldr(self, f: F, z: Z) -> Self::Foldr {
-        let Identity(t) = self;
-        f.call((z, t))
-    }
-}
-*/
 
 #[cfg(test)]
 mod test {

@@ -49,6 +49,19 @@ mod test {
         );
         let list_b = Cons(1, Cons(4, Cons(7, Nil)));
         let list = list_a.apply(list_b);
-        //panic!("{list:#?}");
+
+        assert_eq!(
+            list,
+            Cons(
+                2,
+                Cons(
+                    8,
+                    Cons(
+                        14,
+                        Cons(5, Cons(20, Cons(35, Cons(9, Cons(36, Cons(63, Nil))))),),
+                    ),
+                ),
+            ),
+        )
     }
 }

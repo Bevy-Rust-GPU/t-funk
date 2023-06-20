@@ -6,7 +6,10 @@ use crate::typeclass::{
 
 macro_rules! implementation {
     ($ident:ident $(, $rest:ident)*) => {
-        impl<$ident, $($rest,)*> Mconcat for ($ident, $($rest,)*) where $ident: Mempty, Self: Foldl<MappendF, MemptyT<$ident>>
+        impl<$ident, $($rest,)*> Mconcat for ($ident, $($rest,)*)
+        where
+            $ident: Mempty,
+            Self: Foldl<MappendF, MemptyT<$ident>>
         {
             type Mconcat = FoldlT<Self, MappendF, MemptyT<$ident>>;
 
@@ -30,4 +33,3 @@ mod test {
         assert_eq!(mconcatted, Sum(1 + 2 + 3));
     }
 }
-

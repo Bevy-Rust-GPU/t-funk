@@ -5,7 +5,7 @@ mod then;
 
 pub mod trans;
 
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 pub use chain::*;
 pub use inst::*;

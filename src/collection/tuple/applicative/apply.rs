@@ -1,6 +1,6 @@
-use crate::{
-    closure::{Closure, OutputT},
-    typeclass::applicative::Apply,
+use crate::typeclass::{
+    applicative::Apply,
+    functor::{Fmap, FmapT},
 };
 
 macro_rules! impl_apply {
@@ -8,17 +8,18 @@ macro_rules! impl_apply {
         #[allow(unused_parens)]
         impl<_Type, $($ident),*> Apply<_Type> for ($($ident,)*)
         where
-            _Type: Clone,
-            $(
-                $ident: Closure<_Type>
-            ),*
+            _Type: Clone + $(Fmap<$ident> +)*,
         {
-            type Apply = ($(OutputT<$ident, _Type>,)*);
+            type Apply = ($(FmapT<_Type, $ident>,)*);
 
             #[allow(non_snake_case)]
             fn apply(self, t: _Type) -> Self::Apply {
+
                 let ($($ident,)*) = self;
-                ($($ident.call(t.clone()),)*)
+                $(
+                    let $ident = t.clone().fmap($ident);
+                )*
+                ($($ident,)*)
             }
         }
     };
@@ -37,8 +38,7 @@ mod test {
     #[test]
     fn test_tuple_apply() {
         let tup = (Add.suffix2(2), Sub.suffix2(2), Mul.suffix2(2));
-        let applied = tup.apply(4);
-        assert_eq!(applied, (4 + 2, 4 - 2, 4 * 2))
+        let applied = tup.apply((4,));
+        assert_eq!(applied, ((4 + 2,), (4 - 2,), (4 * 2,)))
     }
 }
-

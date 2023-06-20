@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use core::marker::PhantomData;
 
 use t_funk_macros::{lift, Closure, Copointed, Pointed};
 

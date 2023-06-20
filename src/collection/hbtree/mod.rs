@@ -11,27 +11,12 @@ pub use functor::*;
 pub use monoid::*;
 pub use semigroup::*;
 
+use crate::macros::phantom::{PhantomClone, PhantomCopy, PhantomDefault};
+
+#[derive(
+    Debug, PhantomDefault, PhantomCopy, PhantomClone, PartialEq, Eq, PartialOrd, Ord, Hash,
+)]
 pub struct Leaf<T = ()>(PhantomData<T>);
-
-impl<T> Debug for Leaf<T> {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        f.debug_tuple("Leaf").field(&self.0).finish()
-    }
-}
-
-impl<T> Default for Leaf<T> {
-    fn default() -> Self {
-        Self(PhantomData)
-    }
-}
-
-impl<T> Clone for Leaf<T> {
-    fn clone(&self) -> Self {
-        Self(PhantomData)
-    }
-}
-
-impl<T> Copy for Leaf<T> {}
 
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Branch<L, T, R>(pub L, pub T, pub R);

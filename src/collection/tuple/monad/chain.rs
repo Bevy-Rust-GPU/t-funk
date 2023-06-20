@@ -29,7 +29,7 @@ mod test {
 
     use crate::{
         collection::hlist::{Cons, Nil},
-        typeclass::{copointed::CopointF, functor::Fmap, monad::Chain},
+        typeclass::monad::Chain,
     };
 
     #[test]
@@ -48,7 +48,9 @@ mod test {
 
         let chained = tuple.chain(MakeList);
         let chained = chained.chain(MakeTuple);
-        let chained = chained.fmap(CopointF);
-        assert_eq!(chained, tuple)
+        assert_eq!(chained, tuple);
+
+        let chained = tuple.chain(MakeTuple);
+        assert_eq!(chained, tuple);
     }
 }

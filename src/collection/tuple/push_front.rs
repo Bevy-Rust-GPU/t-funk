@@ -1,3 +1,7 @@
+use t_funk_macros::{functions, types};
+
+#[types]
+#[functions]
 pub trait PushFront<T> {
     type PushFront;
 
@@ -43,4 +47,3 @@ mod test {
         assert_eq!(tup, ("4", '3', 2.0, 1));
     }
 }
-

@@ -12,8 +12,15 @@ use t_funk::macros::lift;
 
 /// Return the absolute value of a float
 #[lift]
-pub fn abs(input: f32) -> f32 {
-    input.abs()
+pub fn abs<T>(input: T) -> T
+where
+    T: Default + PartialOrd + core::ops::Neg<Output = T>,
+{
+    if input < Default::default() {
+        -input
+    } else {
+        input
+    }
 }
 
 /// Add two values
@@ -130,39 +137,43 @@ where
 pub type NegT<T> = <T as core::ops::Neg>::Output;
 
 /// Print the provided input to stdout
+#[cfg(feature = "std")]
 #[lift]
 pub fn print_ln<T>(t: T)
 where
     T: Display,
 {
-    println!("{t:}")
+    std::println!("{t:}")
 }
 
 /// Format the provided input using Display
 #[lift]
-pub fn format_display<T>(t: T) -> String
+#[cfg(feature = "alloc")]
+pub fn format_display<T>(t: T) -> alloc::string::String
 where
     T: Display,
 {
-    format!("{t:}")
+    std::format!("{t:}")
 }
 
 /// Format the provided input using Debug
 #[lift]
-pub fn format_debug<T>(t: T) -> String
+#[cfg(feature = "alloc")]
+pub fn format_debug<T>(t: T) -> alloc::string::String
 where
     T: Debug,
 {
-    format!("{t:?}")
+    std::format!("{t:?}")
 }
 
 /// Format the provided input using Debug with multiline semantics
 #[lift]
-pub fn format_debug_multiline<T>(t: T) -> String
+#[cfg(feature = "alloc")]
+pub fn format_debug_multiline<T>(t: T) -> alloc::string::String
 where
     T: Debug,
 {
-    format!("{t:#?}")
+    std::format!("{t:#?}")
 }
 
 /// Unwrap the provided Result
@@ -209,13 +220,10 @@ pub fn swap<A, B>(a: A, b: B) -> (B, A) {
     (b, a)
 }
 
-#[cfg(feature = "alloc")]
-extern crate alloc;
-
-#[cfg(feature = "alloc")]
 /// Convert the provided input into a String
 #[lift]
-pub fn to_string<T>(t: T) -> String
+#[cfg(feature = "alloc")]
+pub fn to_string<T>(t: T) -> alloc::string::String
 where
     T: alloc::string::ToString,
 {

@@ -1,25 +1,53 @@
 use crate::typeclass::semigroup::Mappend;
 
-impl<T> Mappend<T> for () {
+impl<T> Mappend<(T,)> for () {
     type Mappend = (T,);
 
-    fn mappend(self, t: T) -> Self::Mappend {
-        (t,)
+    fn mappend(self, t: (T,)) -> Self::Mappend {
+        t
+    }
+}
+
+macro_rules! impl_inner {
+    ($($ident:ident),* => $($ident2:ident),*) => {
+        impl<$($ident,)* $($ident2,)*> Mappend<($($ident2,)*)> for ($($ident,)*)
+        {
+            type Mappend = ($($ident,)* $($ident2,)*);
+
+            #[allow(non_snake_case)]
+            fn mappend(self, ($($ident2,)*): ($($ident2,)*)) -> Self::Mappend {
+                let ($($ident,)*) = self;
+                ($($ident,)* $($ident2,)*)
+            }
+        }
     }
 }
 
 macro_rules! implementation {
     ($($ident:ident),*) => {
-        impl<_Type, $($ident,)*> Mappend<_Type> for ($($ident,)*)
+        impl<$($ident,)*> Mappend<()> for ($($ident,)*)
         {
-            type Mappend = ($($ident,)* _Type);
+            type Mappend = Self;
 
             #[allow(non_snake_case)]
-            fn mappend(self, t: _Type) -> Self::Mappend {
-                let ($($ident,)*) = self;
-                ($($ident,)* t)
+            fn mappend(self, (): ()) -> Self::Mappend {
+                self
             }
         }
+
+        impl_inner!($($ident),* => _A);
+        impl_inner!($($ident),* => _A, _B);
+        impl_inner!($($ident),* => _A, _B, _C);
+        impl_inner!($($ident),* => _A, _B, _C, _D);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H, _I);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H, _I, _J);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L);
+        impl_inner!($($ident),* => _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M);
     };
 }
 
@@ -32,11 +60,10 @@ mod test {
     #[test]
     fn test_tuple_mappend() {
         let tup = ();
-        let tup = tup.mappend(1);
-        let tup = tup.mappend(2.0);
-        let tup = tup.mappend('3');
-        let tup = tup.mappend("4");
+        let tup = tup.mappend((1,));
+        let tup = tup.mappend((2.0,));
+        let tup = tup.mappend(('3',));
+        let tup = tup.mappend(("4",));
         assert_eq!(tup, (1, 2.0, '3', "4"));
     }
 }
-
