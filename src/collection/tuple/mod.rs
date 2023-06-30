@@ -1,6 +1,8 @@
 #[macro_export]
 macro_rules! impl_tuple {
-    ($macro:ident => ) => {};
+    ($macro:ident => ) => {
+        $macro!();
+    };
     ($macro:ident => $ident:ident $(, $rest:ident)*) => {
         $macro!($ident $(, $rest)*);
         impl_tuple!($macro => $($rest),*);

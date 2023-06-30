@@ -8,14 +8,6 @@ pub trait PushFront<T> {
     fn push_front(self, t: T) -> Self::PushFront;
 }
 
-impl<T> PushFront<T> for () {
-    type PushFront = (T,);
-
-    fn push_front(self, t: T) -> Self::PushFront {
-        (t,)
-    }
-}
-
 macro_rules! implementation {
     ($($ident:ident),*) => {
         impl<_Type, $($ident,)*> PushFront<_Type> for ($($ident,)*)

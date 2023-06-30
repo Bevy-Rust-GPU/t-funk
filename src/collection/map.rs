@@ -1,9 +1,7 @@
 //! Type-level map, which associates type keys with values
 
-use crate::{
-    macros::{functions, types},
-    peano::*,
-};
+use crate::macros::{functions, types};
+use typenum::consts::*;
 
 #[functions]
 #[types]
@@ -70,32 +68,32 @@ macro_rules! impl_get {
     };
 }
 
-impl_get!((A,) => (P0, A));
+impl_get!((A,) => (U0, A));
 
-impl_get!((A, B) => (P0, A));
-impl_get!((A, B) => (P1, B));
+impl_get!((A, B) => (U0, A));
+impl_get!((A, B) => (U1, B));
 
-impl_get!((A, B, C) => (P0, A));
-impl_get!((A, B, C) => (P1, B));
-impl_get!((A, B, C) => (P2, C));
+impl_get!((A, B, C) => (U0, A));
+impl_get!((A, B, C) => (U1, B));
+impl_get!((A, B, C) => (U2, C));
 
-impl_get!((A, B, C, D) => (P0, A));
-impl_get!((A, B, C, D) => (P1, B));
-impl_get!((A, B, C, D) => (P2, C));
-impl_get!((A, B, C, D) => (P3, D));
+impl_get!((A, B, C, D) => (U0, A));
+impl_get!((A, B, C, D) => (U1, B));
+impl_get!((A, B, C, D) => (U2, C));
+impl_get!((A, B, C, D) => (U3, D));
 
-impl_get!((A, B, C, D, E) => (P0, A));
-impl_get!((A, B, C, D, E) => (P1, B));
-impl_get!((A, B, C, D, E) => (P2, C));
-impl_get!((A, B, C, D, E) => (P3, D));
-impl_get!((A, B, C, D, E) => (P4, E));
+impl_get!((A, B, C, D, E) => (U0, A));
+impl_get!((A, B, C, D, E) => (U1, B));
+impl_get!((A, B, C, D, E) => (U2, C));
+impl_get!((A, B, C, D, E) => (U3, D));
+impl_get!((A, B, C, D, E) => (U4, E));
 
-impl_get!((A, B, C, D, E, F) => (P0, A));
-impl_get!((A, B, C, D, E, F) => (P1, B));
-impl_get!((A, B, C, D, E, F) => (P2, C));
-impl_get!((A, B, C, D, E, F) => (P3, D));
-impl_get!((A, B, C, D, E, F) => (P4, E));
-impl_get!((A, B, C, D, E, F) => (P5, F));
+impl_get!((A, B, C, D, E, F) => (U0, A));
+impl_get!((A, B, C, D, E, F) => (U1, B));
+impl_get!((A, B, C, D, E, F) => (U2, C));
+impl_get!((A, B, C, D, E, F) => (U3, D));
+impl_get!((A, B, C, D, E, F) => (U4, E));
+impl_get!((A, B, C, D, E, F) => (U5, F));
 
 #[cfg(test)]
 mod test {

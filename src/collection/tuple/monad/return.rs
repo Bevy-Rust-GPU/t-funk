@@ -1,13 +1,5 @@
 use crate::typeclass::monad::Return;
 
-impl<U> Return<U> for () {
-    type Return = (U,);
-
-    fn r#return(t: U) -> Self::Return {
-        (t,)
-    }
-}
-
 macro_rules! impl_apply {
     ($($ident:ident),*) => {
         #[allow(unused_parens)]

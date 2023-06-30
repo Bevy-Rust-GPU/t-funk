@@ -1,10 +1,14 @@
+mod r#as;
 mod from;
 mod into;
 mod replicate_m;
+mod unfold_m;
 
 pub use from::*;
 pub use into::*;
+pub use r#as::*;
 pub use replicate_m::*;
+pub use unfold_m::*;
 
 use core::fmt::{Debug, Display};
 

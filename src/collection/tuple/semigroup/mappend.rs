@@ -1,13 +1,5 @@
 use crate::typeclass::semigroup::Mappend;
 
-impl<T> Mappend<(T,)> for () {
-    type Mappend = (T,);
-
-    fn mappend(self, t: (T,)) -> Self::Mappend {
-        t
-    }
-}
-
 macro_rules! impl_inner {
     ($($ident:ident),* => $($ident2:ident),*) => {
         impl<$($ident,)* $($ident2,)*> Mappend<($($ident2,)*)> for ($($ident,)*)
@@ -25,16 +17,7 @@ macro_rules! impl_inner {
 
 macro_rules! implementation {
     ($($ident:ident),*) => {
-        impl<$($ident,)*> Mappend<()> for ($($ident,)*)
-        {
-            type Mappend = Self;
-
-            #[allow(non_snake_case)]
-            fn mappend(self, (): ()) -> Self::Mappend {
-                self
-            }
-        }
-
+        impl_inner!($($ident),* =>);
         impl_inner!($($ident),* => _A);
         impl_inner!($($ident),* => _A, _B);
         impl_inner!($($ident),* => _A, _B, _C);

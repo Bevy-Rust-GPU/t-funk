@@ -1,13 +1,5 @@
 use crate::typeclass::applicative::Pure;
 
-impl<U> Pure<U> for () {
-    type Pure = (U,);
-
-    fn pure(t: U) -> Self::Pure {
-        (t,)
-    }
-}
-
 macro_rules! impl_apply {
     ($($ident:ident),*) => {
         #[allow(unused_parens)]

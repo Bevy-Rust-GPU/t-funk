@@ -62,6 +62,8 @@ extern crate alloc;
 #[cfg(feature = "std")]
 extern crate std;
 
+pub use typenum;
+
 pub mod closure;
 pub mod collection;
 pub mod either;
@@ -69,5 +71,4 @@ pub mod function;
 pub mod lens;
 pub mod macros;
 pub mod op_chain;
-pub mod peano;
 pub mod typeclass;

@@ -12,14 +12,6 @@ pub trait Fmap<F>: Sized {
     fn fmap(self, f: F) -> Self::Fmap;
 }
 
-impl<F> Fmap<F> for () {
-    type Fmap = ();
-
-    fn fmap(self, _: F) -> Self::Fmap {
-        ()
-    }
-}
-
 #[cfg(feature = "alloc")]
 extern crate alloc;
 

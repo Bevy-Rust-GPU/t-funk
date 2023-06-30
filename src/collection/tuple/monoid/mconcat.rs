@@ -5,6 +5,7 @@ use crate::typeclass::{
 };
 
 macro_rules! implementation {
+    () => {};
     ($ident:ident $(, $rest:ident)*) => {
         impl<$ident, $($rest,)*> Mconcat for ($ident, $($rest,)*)
         where

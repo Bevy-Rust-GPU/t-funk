@@ -9,4 +9,5 @@ alloc = []
 std = ["alloc"]
 
 [dependencies]
+typenum = "1.16.0"
 t-funk-macros = { git = "https://github.com/bevy-rust-gpu/t-funk-macros" }

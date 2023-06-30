@@ -12,7 +12,7 @@ macro_rules! impl_apply {
         {
             type Apply = ($(FmapT<_Type, $ident>,)*);
 
-            #[allow(non_snake_case)]
+            #[allow(non_snake_case, unused_variables)]
             fn apply(self, t: _Type) -> Self::Apply {
 
                 let ($($ident,)*) = self;

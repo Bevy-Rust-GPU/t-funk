@@ -13,7 +13,7 @@ macro_rules! implementation {
         {
             type Fmap = ($(OutputT<_Function, $ident>,)*);
 
-            #[allow(non_snake_case)]
+            #[allow(non_snake_case, unused_variables)]
             fn fmap(self, f: _Function) -> Self::Fmap {
                 let ($($ident,)*) = self;
                 ($(f.clone().call($ident),)*)

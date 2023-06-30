@@ -9,6 +9,7 @@ use crate::{
 };
 
 macro_rules! implementation {
+    () => {};
     ($ident:ident $(, $rest:ident)*) => {
         impl<_Function, $ident $(, $rest)*> FoldMap<_Function> for ($ident $(, $rest)*,)
         where
@@ -39,4 +40,3 @@ mod test {
         assert_eq!(fold_mapped, Sum(1 + 2 + 3))
     }
 }
-

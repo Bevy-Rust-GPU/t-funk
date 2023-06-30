@@ -9,6 +9,7 @@ use crate::t_funk::{
         semigroup::Mappend,
     },
 };
+use crate::typeclass::monoid::Mconcat;
 use core::ops::Add;
 
 /// A `Semigroup` wrapper that can append additively.
@@ -58,6 +59,14 @@ where
 
     fn mempty() -> Self::Mempty {
         Sum(Default::default())
+    }
+}
+
+impl<T> Mconcat for Sum<T> {
+    type Mconcat = Self;
+
+    fn mconcat(self) -> Self::Mconcat {
+        self
     }
 }
 
